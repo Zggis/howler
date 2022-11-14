@@ -6,15 +6,16 @@ import com.zggis.howler.utils.DiscordWebhook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class DiscordEventListener {
 
     private static final Logger logger = LoggerFactory.getLogger(DiscordEventListener.class);
 
-    private DiscordWebhook discordWebhook;
+    private final DiscordWebhook discordWebhook;
 
-    private AlertEntity alert;
+    private final AlertEntity alert;
 
     public DiscordEventListener(AlertEntity alert) {
         discordWebhook = new DiscordWebhook(alert.getWebhookUrl());
@@ -27,8 +28,9 @@ public class DiscordEventListener {
         if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
             discordWebhook.setContent("Alert - " + alert.getName() + " was triggered!");
             DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
+            embed.setColor(Color.GREEN);
             embed.setDescription(event);
-            //embed.setThumbnail("");
+            embed.setThumbnail("https://raw.githubusercontent.com/Zggis/howler/master/favicon.webp");
             discordWebhook.addEmbed(embed);
             try {
                 discordWebhook.execute();
