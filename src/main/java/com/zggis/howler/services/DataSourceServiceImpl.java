@@ -1,9 +1,9 @@
 package com.zggis.howler.services;
 
 import com.google.common.eventbus.EventBus;
+import com.zggis.howler.entity.AlertEntity;
 import com.zggis.howler.entity.DataSourceEntity;
-import com.zggis.howler.listeners.DiscordEventListener;
-import com.zggis.howler.listeners.TestEventListener;
+import com.zggis.howler.repositories.AlertRepo;
 import com.zggis.howler.repositories.DataSourceRepo;
 import com.zggis.howler.runners.FileWatcher;
 import com.zggis.howler.runners.FolderWatcher;
@@ -11,11 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +33,9 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Autowired
     private DataSourceRepo dataSourceRepo;
+
+    @Autowired
+    private AlertRepo alertRepo;
 
     private final Map<Long, EventBus> eventBusses = new HashMap<>();
 
@@ -51,14 +57,19 @@ public class DataSourceServiceImpl implements DataSourceService {
     }
 
     @Override
+    @Transactional
     public DataSourceEntity add(DataSourceEntity entity) {
-        DataSourceEntity saveResult = dataSourceRepo.save(entity);
-        setupDataSource(saveResult);
-        return saveResult;
+        if (CollectionUtils.isEmpty(dataSourceRepo.findByPath(entity.getPath()))) {
+            DataSourceEntity saveResult = dataSourceRepo.save(entity);
+            setupDataSource(saveResult);
+            return saveResult;
+        }
+        logger.error("Could not add Data Source for {} since one already exists for that path", entity.getPath());
+        return null;
     }
 
     private void setupDataSource(DataSourceEntity saveResult) {
-        logger.info("Setting up DataSource {}", saveResult.getPath());
+        logger.info("Setting up Data Source {}", saveResult.getPath());
         EventBus eventBus = new EventBus();
         ExecutorService executor = Executors.newFixedThreadPool(10);
         eventBusses.put(saveResult.getId(), eventBus);
@@ -91,7 +102,9 @@ public class DataSourceServiceImpl implements DataSourceService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
+        logger.info("Deleting Data Source {}", id);
         dataSourceRepo.deleteById(id);
         ExecutorService executorService = executors.remove(id);
         if (executorService != null) {
@@ -104,7 +117,9 @@ public class DataSourceServiceImpl implements DataSourceService {
                 executorService.shutdownNow();
             }
         }
-        //Remove any alters tied to this bus
+        for (AlertEntity deletedAlert : alertRepo.deleteByDataSourceId(id)) {
+            logger.info("{} alert was deleted since it was connected to the deleted Data Source {}", deletedAlert.getName(), id);
+        }
         eventBusses.remove(id);
     }
 

@@ -2,15 +2,16 @@ package com.zggis.howler.services;
 
 import com.google.common.eventbus.EventBus;
 import com.zggis.howler.entity.AlertEntity;
+import com.zggis.howler.entity.DataSourceEntity;
 import com.zggis.howler.listeners.DiscordEventListener;
 import com.zggis.howler.repositories.AlertRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,18 +37,29 @@ public class AlertServiceImpl implements AlertService {
     }
 
     @Override
+    @Transactional
     public AlertEntity add(AlertEntity entity) {
-        AlertEntity savedAlert = alertRepo.save(entity);
-        setupAlert(savedAlert);
-        return savedAlert;
+        Optional<DataSourceEntity> findByIdResult = dataSourceService.findById(entity.getDataSourceId());
+        if (findByIdResult.isPresent()) {
+            AlertEntity savedAlert = alertRepo.save(entity);
+            setupAlert(savedAlert);
+            return savedAlert;
+        }
+        logger.error("Alert was not created because Data Source {} does not exist.", entity.getDataSourceId());
+        return null;
     }
 
     private void setupAlert(AlertEntity savedAlert) {
         logger.info("Setting up Alert {} to match '{}'", savedAlert.getName(), savedAlert.getMatchingString());
         EventBus eventBus = dataSourceService.getEventBus(savedAlert.getDataSourceId());
-        DiscordEventListener listener = new DiscordEventListener(savedAlert);
-        eventBus.register(listener);
-        listeners.put(savedAlert.getId(), listener);
+        if (eventBus != null) {
+            DiscordEventListener listener = new DiscordEventListener(savedAlert);
+            eventBus.register(listener);
+            listeners.put(savedAlert.getId(), listener);
+        } else {
+            logger.warn("Unable to setup this alert because Data Source does not exist. This Alert will be deleted.");
+            deleteById(savedAlert.getId());
+        }
     }
 
     @Override
@@ -61,11 +73,14 @@ public class AlertServiceImpl implements AlertService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         Optional<AlertEntity> findById = alertRepo.findById(id);
         if (findById.isPresent()) {
             EventBus eventBus = dataSourceService.getEventBus(findById.get().getDataSourceId());
-            eventBus.unregister(listeners.get(id));
+            if (eventBus != null) {
+                eventBus.unregister(listeners.get(id));
+            }
             alertRepo.deleteById(id);
         }
     }

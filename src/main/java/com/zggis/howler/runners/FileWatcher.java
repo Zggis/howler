@@ -23,9 +23,10 @@ public class FileWatcher implements Runnable {
 
     @Override
     public void run() {
+        logger.info("Started watching '{}'", file.getName());
         Tailer tailer = new Tailer(file, new MyListener(eventBus), 500, true, true);
         tailer.run();
-        logger.info("Removed {} from datasource", file.getName());
+        logger.info("Removed '{}' from Data Source", file.getName());
     }
 
     private static class MyListener extends TailerListenerAdapter {

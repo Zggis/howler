@@ -4,10 +4,15 @@ import com.zggis.howler.dto.DataSourceDTO;
 import com.zggis.howler.entity.DataSourceEntity;
 import com.zggis.howler.services.DataSourceService;
 import io.swagger.v3.oas.annotations.Operation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +20,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/datasource")
 public class DataSourceController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceController.class);
 
     @Autowired
     private DataSourceService dataSourceService;
@@ -42,9 +49,16 @@ public class DataSourceController {
     @Operation(summary = "Add new data source")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<DataSourceDTO> addDataSource(@RequestBody DataSourceDTO newDataSource) {
-        DataSourceEntity newEntity = new DataSourceEntity(newDataSource);
-        DataSourceEntity result = dataSourceService.add(newEntity);
-        return ResponseEntity.ok(new DataSourceDTO(result));
+        Path file = new File(newDataSource.getPath()).toPath();
+        boolean exists = Files.exists(file);        // Check if the file exists
+        boolean isDirectory = Files.isDirectory(file);   // Check if it's a directory
+        if (exists && isDirectory) {
+            DataSourceEntity newEntity = new DataSourceEntity(newDataSource);
+            DataSourceEntity result = dataSourceService.add(newEntity);
+            return ResponseEntity.ok(new DataSourceDTO(result));
+        }
+        logger.error("Data Source was not created because {} is not a valid directory path", newDataSource.getPath());
+        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "Remove data source")
