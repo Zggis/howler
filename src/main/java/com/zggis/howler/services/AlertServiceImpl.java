@@ -63,11 +63,6 @@ public class AlertServiceImpl implements AlertService {
     }
 
     @Override
-    public Optional<AlertEntity> findById(Long id) {
-        return alertRepo.findById(id);
-    }
-
-    @Override
     public Iterable<AlertEntity> findAll() {
         return alertRepo.findAll();
     }

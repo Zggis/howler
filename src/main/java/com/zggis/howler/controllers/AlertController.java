@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 @RestController
@@ -34,16 +33,6 @@ public class AlertController {
             result.add(new AlertDTO(entity));
         }
         return ResponseEntity.ok(result);
-    }
-
-    @Operation(summary = "Fetch a alert")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<AlertDTO> fetchAlert(@PathVariable Long id) {
-        Optional<AlertEntity> findById = alertService.findById(id);
-        if (findById.isPresent()) {
-            return ResponseEntity.ok(new AlertDTO(findById.get()));
-        }
-        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "Add new alert")

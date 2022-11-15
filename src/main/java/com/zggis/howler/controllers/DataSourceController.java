@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/datasource")
@@ -34,16 +33,6 @@ public class DataSourceController {
             result.add(new DataSourceDTO(entity));
         }
         return ResponseEntity.ok(result);
-    }
-
-    @Operation(summary = "Fetch a data source")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<DataSourceDTO> fetchDataSource(@PathVariable Long id) {
-        Optional<DataSourceEntity> findById = dataSourceService.findById(id);
-        if (findById.isPresent()) {
-            return ResponseEntity.ok(new DataSourceDTO(findById.get()));
-        }
-        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "Add new data source")
