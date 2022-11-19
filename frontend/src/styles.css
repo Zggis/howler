@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background: rgba(174, 160, 147, .75) !important;
+}
+
+.sidebar{
+    background: rgba(174, 160, 147, 1) !important;
+}
+
+.navbar {
+    background: rgba(88, 88, 88, 1) !important;
+}
