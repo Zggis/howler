@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @RestController
-@RequestMapping("/alert")
+@RequestMapping("/rest/alert")
 public class AlertController {
 
     private static final Logger logger = LoggerFactory.getLogger(AlertController.class);
@@ -26,7 +26,7 @@ public class AlertController {
     private AlertService alertService;
 
     @Operation(summary = "Fetch all alerts")
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<List<AlertDTO>> fetchAllAlerts() {
         List<AlertDTO> result = new ArrayList<>();
         for (AlertEntity entity : alertService.findAll()) {

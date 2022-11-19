@@ -13,5 +13,5 @@ node {
 }
 
 task build(type: NpmTask) {
-  args = ['run', 'build']
+  args = ['run', 'build', '--configuration=production']
 }
