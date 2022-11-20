@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { DataSource, DatasourceService } from '../service/datasource.service';
 
 @Component({
   selector: 'app-datasource',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DatasourceComponent implements OnInit {
 
-  constructor() { }
+  faPlus = faPlus;
+
+  dataSources: DataSource[] = [];
+
+  constructor(private dataSourceService: DatasourceService) { }
 
   ngOnInit(): void {
+    this.dataSourceService.currentDatasources.subscribe(datasources => this.dataSources = datasources);
+    this.dataSourceService.getDataSources();
   }
 
 }

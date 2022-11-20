@@ -1,1 +1,35 @@
-<p>datasource works!</p>
+<div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2 mb-3 border-bottom border-dark">
+    <h1 class="h2">Data Sources</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="blur();">
+                Add Data Source <fa-icon [icon]="faPlus"></fa-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Path</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let dataSource of dataSources">
+            <td>{{dataSource.path}}</td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Action
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" style="color:red">Remove</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
