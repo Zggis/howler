@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/datasource")
+@RequestMapping("/rest/datasource")
 public class DataSourceController {
 
     private static final Logger logger = LoggerFactory.getLogger(DataSourceController.class);
@@ -26,7 +26,7 @@ public class DataSourceController {
     private DataSourceService dataSourceService;
 
     @Operation(summary = "Fetch all data sources")
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<List<DataSourceDTO>> fetchAllDataSources() {
         List<DataSourceDTO> result = new ArrayList<>();
         for (DataSourceEntity entity : dataSourceService.findAll()) {

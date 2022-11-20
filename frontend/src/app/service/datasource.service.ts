@@ -4,24 +4,20 @@ import { DOCUMENT } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 
-export class Alert {
+export class DataSource {
   constructor(
-    public name: string,
     public id: number,
-    public dataSourceId: number,
-    public dataSourcePath: string,
-    public webhookUrl: string,
-    public matchingString: string
+    public path: string
   ) { }
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService {
+export class DatasourceService {
 
-  private alerts = new BehaviorSubject<Alert[]>([]);
-  currentAlerts = this.alerts.asObservable();
+  private datasources = new BehaviorSubject<DataSource[]>([]);
+  currentDatasources = this.datasources.asObservable();
 
   private port: string;
   private host: string = this.document.location.hostname;
@@ -41,9 +37,9 @@ export class AlertService {
     return 'http://' + this.host + ':' + this.port;
   }
 
-  getAlerts() {
-    this.httpClient.get<Alert[]>('http://' + this.host + ':' + this.port + '/rest/alert').subscribe(
-      response => this.alerts.next(response)
+  getDataSources() {
+    this.httpClient.get<DataSource[]>('http://' + this.host + ':' + this.port + '/rest/datasource').subscribe(
+      response => this.datasources.next(response)
     );
   }
 }
