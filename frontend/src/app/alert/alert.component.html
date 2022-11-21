@@ -3,7 +3,7 @@
     <h1 class="h2">Alerts</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="blur();">
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openModal(addAlertModal);" onclick="blur();">
                 Add Alert <fa-icon [icon]="faPlus"></fa-icon>
             </button>
         </div>
@@ -38,10 +38,46 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#" style="color:red">Remove</a></li>
+                        <li><a class="dropdown-item" href="#" style="color:red" (click)="deleteAlert(alert.id);" onclick="blur();">Remove</a></li>
                     </ul>
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
+
+<ng-template #addAlertModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="newTVShowModalLabel">
+            <fa-icon [icon]="faBell"></fa-icon> Add Alert
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label> <input type="text" class="form-control" id="name"
+                    name="name" [(ngModel)]="newAlert.name" placeholder="Optional">
+            </div>
+            <div class="mb-3">
+                <label for="dataSourceId" class="form-label">Data Source ID</label> <input ngbAutofocus type="text"
+                    class="form-control" id="dataSourceId" name="dataSourceId" [(ngModel)]="newAlert.dataSourceId">
+            </div>
+            <div class="mb-3">
+                <label for="webhookUrl" class="form-label">WebhookUrl</label> <input ngbAutofocus type="text"
+                    class="form-control" id="webhookUrl" name="webhookUrl" [(ngModel)]="newAlert.webhookUrl">
+            </div>
+            <div class="mb-3">
+                <label for="matchingString" class="form-label">Trigger Event</label> <input ngbAutofocus type="text"
+                    class="form-control" id="matchingString" name="matchingString"
+                    [(ngModel)]="newAlert.matchingString">
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="modal.dismiss()">Cancel <i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="btn btn-success" (click)="addAlert()">Add Alert <fa-icon [icon]="faPlus"></fa-icon>
+        </button>
+    </div>
+</ng-template>

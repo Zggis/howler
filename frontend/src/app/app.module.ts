@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AlertComponent } from './alert/alert.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DatasourceComponent } from './datasource/datasource.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { DatasourceComponent } from './datasource/datasource.component';
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

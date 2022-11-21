@@ -46,4 +46,24 @@ export class AlertService {
       response => this.alerts.next(response)
     );
   }
+
+  addAlert(request: Alert) {
+    this.httpClient.post<Alert>('http://' + this.host + ':' + this.port + '/rest/alert', request).subscribe(
+      response => response != null ? this.alerts.next([...this.alerts.value, response]) : {}
+    );
+  }
+
+  deleteAlert(id: number) {
+    this.httpClient.delete<Alert>('http://' + this.host + ':' + this.port + '/rest/alert/' + id).subscribe(
+      response => this.removeAlert(id)
+    );
+  }
+
+  removeAlert(id: number) {
+    this.alerts.next(
+      this.alerts.value.filter(
+        (alert: Alert) => alert.id != id
+      )
+    );
+  }
 }

@@ -36,7 +36,7 @@ public class AlertController {
     }
 
     @Operation(summary = "Add new alert")
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<AlertDTO> addDataSource(@RequestBody AlertDTO newAlert) {
         if (pattern.matcher(newAlert.getWebhookUrl()).matches()) {
             AlertEntity newEntity = new AlertEntity(newAlert);
@@ -48,7 +48,7 @@ public class AlertController {
     }
 
     @Operation(summary = "Remove alert")
-    @RequestMapping(value = "/remove/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<AlertDTO> removeDataSource(@PathVariable Long id) {
         alertService.deleteById(id);
         return ResponseEntity.ok(null);
