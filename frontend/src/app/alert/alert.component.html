@@ -3,7 +3,8 @@
     <h1 class="h2">Alerts</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openModal(addAlertModal);" onclick="blur();">
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openModal(addAlertModal);"
+                onclick="blur();">
                 Add Alert <fa-icon [icon]="faPlus"></fa-icon>
             </button>
         </div>
@@ -26,20 +27,18 @@
             <td>{{alert.dataSourcePath}}</td>
             <td><span class="badge text-bg-success">Enabled</span></td>
             <td>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                <div ngbDropdown class="d-inline-block">
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
                         Action
                     </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Enable</a></li>
-                        <li><a class="dropdown-item" href="#">Disable</a></li>
-                        <li><a class="dropdown-item" href="#">Test</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="javascript:void(0);" style="color:red" (click)="deleteAlert(alert.id);" onclick="blur();">Remove</a></li>
-                    </ul>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem>Enable</button>
+                        <button ngbDropdownItem>Disable</button>
+                        <button ngbDropdownItem>Test</button>
+                        <div class="dropdown-divider"></div>
+                        <button ngbDropdownItem style="color:red"
+                        (click)="deleteAlert(alert.id);" onclick="blur();">Remove</button>
+                    </div>
                 </div>
             </td>
         </tr>
@@ -60,8 +59,12 @@
                     name="name" [(ngModel)]="newAlert.name" placeholder="Optional">
             </div>
             <div class="mb-3">
-                <label for="dataSourceId" class="form-label">Data Source ID</label> <input ngbAutofocus type="text"
-                    class="form-control" id="dataSourceId" name="dataSourceId" [(ngModel)]="newAlert.dataSourceId">
+                <label for="dataSourceId" class="form-label">Data Source ID</label> <select class="form-select"
+                    aria-label="Data Source Selection" id="dataSourceId" name="dataSourceId"
+                    [(ngModel)]="newAlert.dataSourceId">
+                    <option *ngFor="let dataSource of dataSources" [value]="dataSource.id">{{dataSource.path}}
+                    </option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="webhookUrl" class="form-label">WebhookUrl</label> <input ngbAutofocus type="text"

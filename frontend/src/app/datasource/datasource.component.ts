@@ -23,12 +23,12 @@ export class DatasourceComponent implements OnInit {
     this.dataSourceService.getDataSources();
   }
 
-  addAlert() {
+  addDataSource() {
     this.dataSourceService.addDataSource(this.newDataSource);
     this.modalService.dismissAll();
   }
 
-  deleteAlert(id: number) {
+  deleteDataSource(id: number) {
     this.dataSourceService.deleteDataSource(id);
   }
 
