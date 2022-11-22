@@ -42,4 +42,24 @@ export class DatasourceService {
       response => this.datasources.next(response)
     );
   }
+
+  addDataSource(request: DataSource) {
+    this.httpClient.post<DataSource>('http://' + this.host + ':' + this.port + '/rest/datasource', request).subscribe(
+      response => response != null ? this.datasources.next([...this.datasources.value, response]) : {}
+    );
+  }
+
+  deleteDataSource(id: number) {
+    this.httpClient.delete<DataSource>('http://' + this.host + ':' + this.port + '/rest/datasource/' + id).subscribe(
+      response => this.removeDataSource(id)
+    );
+  }
+
+  removeDataSource(id: number) {
+    this.datasources.next(
+      this.datasources.value.filter(
+        (ds: DataSource) => ds.id != id
+      )
+    );
+  }
 }

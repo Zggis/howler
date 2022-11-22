@@ -36,7 +36,7 @@ public class DataSourceController {
     }
 
     @Operation(summary = "Add new data source")
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<DataSourceDTO> addDataSource(@RequestBody DataSourceDTO newDataSource) {
         Path file = new File(newDataSource.getPath()).toPath();
         boolean exists = Files.exists(file);        // Check if the file exists
@@ -51,7 +51,7 @@ public class DataSourceController {
     }
 
     @Operation(summary = "Remove data source")
-    @RequestMapping(value = "/remove/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<DataSourceDTO> removeDataSource(@PathVariable Long id) {
         dataSourceService.deleteById(id);
         return ResponseEntity.ok(null);

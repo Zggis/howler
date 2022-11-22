@@ -41,7 +41,11 @@ public class AlertController {
         if (pattern.matcher(newAlert.getWebhookUrl()).matches()) {
             AlertEntity newEntity = new AlertEntity(newAlert);
             AlertEntity result = alertService.add(newEntity);
-            return ResponseEntity.ok(new AlertDTO(result));
+            if (result != null) {
+                return ResponseEntity.ok(new AlertDTO(result));
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         }
         logger.error("Alert was not added because {} is not a valid Discord webhook", newAlert.getWebhookUrl());
         return ResponseEntity.badRequest().build();

@@ -3,7 +3,7 @@
     <h1 class="h2">Data Sources</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="blur();">
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openModal(addDataSourceModal);" onclick="blur();">
                 Add Data Source <fa-icon [icon]="faPlus"></fa-icon>
             </button>
         </div>
@@ -26,10 +26,34 @@
                         Action
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" style="color:red">Remove</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" style="color:red" (click)="deleteAlert(dataSource.id);" onclick="blur();">Remove</a></li>
                     </ul>
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
+
+<ng-template #addDataSourceModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="newTVShowModalLabel">
+            <fa-icon [icon]="faFolder"></fa-icon> Add Data Source
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Path</label> <input type="text" class="form-control" id="name"
+                    name="name" [(ngModel)]="newDataSource.path" placeholder="Optional">
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="modal.dismiss()">Cancel <i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="btn btn-success" (click)="addAlert()">Add Data Source <fa-icon [icon]="faPlus">
+            </fa-icon>
+        </button>
+    </div>
+</ng-template>
