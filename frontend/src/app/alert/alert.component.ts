@@ -3,7 +3,6 @@ import { faPlus, faBell } from '@fortawesome/free-solid-svg-icons';
 import { Alert, AlertService } from 'src/app/service/alert.service';
 import { DataSource, DatasourceService } from 'src/app/service/datasource.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { compileDeclareInjectableFromMetadata } from '@angular/compiler';
 
 @Component({
   selector: 'app-alert',
@@ -14,7 +13,7 @@ export class AlertComponent implements OnInit {
 
   alerts: Alert[] = [];
   dataSources: DataSource[] = [];
-  newAlert: Alert = new Alert('', -1, -1, '', '', '');
+  newAlert: Alert = new Alert('', -1, -1, '', '', '', true);
   name: string = '';
 
   faPlus = faPlus;
@@ -30,7 +29,7 @@ export class AlertComponent implements OnInit {
       alerts.forEach(alert =>
         this.dataSources.forEach(ds => {
           if (ds.id == alert.dataSourceId) {
-            this.alerts.push(new Alert(alert.name, alert.id, alert.dataSourceId, ds.path, alert.webhookUrl, alert.matchingString));
+            this.alerts.push(new Alert(alert.name, alert.id, alert.dataSourceId, ds.path, alert.webhookUrl, alert.matchingString, alert.enabled));
           }
         }
         )
@@ -49,13 +48,21 @@ export class AlertComponent implements OnInit {
     this.alertService.deleteAlert(id);
   }
 
+  enableAlert(id: number) {
+    this.alertService.enableAlert(id);
+  }
+
+  disableAlert(id: number) {
+    this.alertService.disableAlert(id);
+  }
+
   openModal(content: any) {
     this.reset();
     this.modalService.open(content);
   }
 
   reset() {
-    this.newAlert = new Alert('', -1, -1, '', '', '');
+    this.newAlert = new Alert('', -1, -1, '', '', '', true);
   }
 
 }

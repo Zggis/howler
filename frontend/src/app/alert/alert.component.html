@@ -25,19 +25,22 @@
             <td>{{alert.name}}</td>
             <td>{{alert.matchingString}}</td>
             <td>{{alert.dataSourcePath}}</td>
-            <td><span class="badge text-bg-success">Enabled</span></td>
+            <td>
+                <span *ngIf="alert.enabled == true" class="badge text-bg-success">Enabled</span>
+                <span *ngIf="alert.enabled == false" class="badge text-bg-danger">Disabled</span>
+            </td>
             <td>
                 <div ngbDropdown class="d-inline-block">
                     <button type="button" class="btn btn-sm btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
                         Action
                     </button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button ngbDropdownItem>Enable</button>
-                        <button ngbDropdownItem>Disable</button>
+                        <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable</button>
+                        <button ngbDropdownItem (click)="disableAlert(alert.id);" onclick="blur();">Disable</button>
                         <button ngbDropdownItem>Test</button>
                         <div class="dropdown-divider"></div>
-                        <button ngbDropdownItem style="color:red"
-                        (click)="deleteAlert(alert.id);" onclick="blur();">Remove</button>
+                        <button ngbDropdownItem style="color:red" (click)="deleteAlert(alert.id);"
+                            onclick="blur();">Remove</button>
                     </div>
                 </div>
             </td>

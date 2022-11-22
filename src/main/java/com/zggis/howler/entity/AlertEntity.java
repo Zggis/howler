@@ -28,10 +28,13 @@ public class AlertEntity {
 
     private String webhookUrl;
 
+    private boolean enabled = true;
+
     public AlertEntity(AlertDTO alertDTO) {
         this.name = alertDTO.getName();
         this.dataSourceId = alertDTO.getDataSourceId();
         this.matchingString = alertDTO.getMatchingString();
         this.webhookUrl = alertDTO.getWebhookUrl();
+        this.enabled = alertDTO.isEnabled();
     }
 }

@@ -11,7 +11,8 @@ export class Alert {
     public dataSourceId: number,
     public dataSourcePath: string,
     public webhookUrl: string,
-    public matchingString: string
+    public matchingString: string,
+    public enabled: boolean
   ) { }
 }
 
@@ -64,6 +65,28 @@ export class AlertService {
       this.alerts.value.filter(
         (alert: Alert) => alert.id != id
       )
+    );
+  }
+
+  updateAlert(incomingAlert: Alert) {
+    const updatedAlerts = this.alerts.getValue().map((alert) => {
+      if (alert.id === incomingAlert.id) {
+        return { ...incomingAlert }
+      }
+      return alert;
+    })
+    this.alerts.next(updatedAlerts);
+  }
+
+  enableAlert(id: number) {
+    this.httpClient.put<Alert>('http://' + this.host + ':' + this.port + '/rest/alert/enable/' + id, null).subscribe(
+      response => this.updateAlert(response)
+    );
+  }
+
+  disableAlert(id: number) {
+    this.httpClient.put<Alert>('http://' + this.host + ':' + this.port + '/rest/alert/disable/' + id, null).subscribe(
+      response => this.updateAlert(response)
     );
   }
 }

@@ -24,11 +24,14 @@ public class AlertDTO implements Serializable {
 
     private String webhookUrl;
 
+    private boolean enabled = true;
+
     public AlertDTO(AlertEntity entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.dataSourceId = entity.getDataSourceId();
         this.matchingString = entity.getMatchingString();
         this.webhookUrl = entity.getWebhookUrl();
+        this.enabled = entity.isEnabled();
     }
 }

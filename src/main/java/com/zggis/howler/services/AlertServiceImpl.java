@@ -54,7 +54,9 @@ public class AlertServiceImpl implements AlertService {
         EventBus eventBus = dataSourceService.getEventBus(savedAlert.getDataSourceId());
         if (eventBus != null) {
             DiscordEventListener listener = new DiscordEventListener(savedAlert);
-            eventBus.register(listener);
+            if (savedAlert.isEnabled()) {
+                eventBus.register(listener);
+            }
             listeners.put(savedAlert.getId(), listener);
         } else {
             logger.warn("Unable to setup this alert because Data Source does not exist. This Alert will be deleted.");
@@ -78,5 +80,33 @@ public class AlertServiceImpl implements AlertService {
             }
             alertRepo.deleteById(id);
         }
+    }
+
+    @Override
+    @Transactional
+    public AlertEntity setEnabled(Long id, boolean enabled) {
+        Optional<AlertEntity> findById = alertRepo.findById(id);
+        if (findById.isPresent()) {
+            EventBus eventBus = dataSourceService.getEventBus(findById.get().getDataSourceId());
+            if (eventBus != null) {
+                findById.get().setEnabled(enabled);
+                alertRepo.save(findById.get());
+                if (!enabled) {
+                    logger.info("Disabling alert '{}'", findById.get().getName());
+                    try {
+                        eventBus.unregister(listeners.get(id));
+                    } catch (IllegalArgumentException ex) {
+                        logger.warn("The alert '{}' could not be disabled because its already disabled", findById.get().getName());
+                    }
+                } else {
+                    logger.info("Enabling alert '{}'", findById.get().getName());
+                    eventBus.register(listeners.get(id));
+                }
+            } else {
+                logger.error("Could not find event bus for data source {}", findById.get().getDataSourceId());
+            }
+            return findById.get();
+        }
+        return null;
     }
 }

@@ -8,4 +8,6 @@ public interface AlertService {
     Iterable<AlertEntity> findAll();
 
     void deleteById(Long id);
+
+    AlertEntity setEnabled(Long id, boolean enabled);
 }

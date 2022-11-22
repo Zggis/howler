@@ -37,7 +37,7 @@ public class AlertController {
 
     @Operation(summary = "Add new alert")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<AlertDTO> addDataSource(@RequestBody AlertDTO newAlert) {
+    public ResponseEntity<AlertDTO> addAlert(@RequestBody AlertDTO newAlert) {
         if (pattern.matcher(newAlert.getWebhookUrl()).matches()) {
             AlertEntity newEntity = new AlertEntity(newAlert);
             AlertEntity result = alertService.add(newEntity);
@@ -53,8 +53,22 @@ public class AlertController {
 
     @Operation(summary = "Remove alert")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<AlertDTO> removeDataSource(@PathVariable Long id) {
+    public ResponseEntity<AlertDTO> removeAlert(@PathVariable Long id) {
         alertService.deleteById(id);
         return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "Enable alert")
+    @RequestMapping(value = "/enable/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<AlertDTO> enableAlert(@PathVariable Long id) {
+        AlertEntity alertEntity = alertService.setEnabled(id, true);
+        return ResponseEntity.ok(new AlertDTO(alertEntity));
+    }
+
+    @Operation(summary = "Disable alert")
+    @RequestMapping(value = "/disable/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<AlertDTO> disableAlert(@PathVariable Long id) {
+        AlertEntity alertEntity = alertService.setEnabled(id, false);
+        return ResponseEntity.ok(new AlertDTO(alertEntity));
     }
 }
