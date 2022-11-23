@@ -22,9 +22,11 @@ public class AlertDTO implements Serializable {
 
     private String matchingString;
 
-    private String webhookUrl;
-
     private boolean enabled = true;
+
+    private String type;
+
+    private String webhookUrl;
 
     public AlertDTO(AlertEntity entity) {
         this.id = entity.getId();
@@ -33,5 +35,6 @@ public class AlertDTO implements Serializable {
         this.matchingString = entity.getMatchingString();
         this.webhookUrl = entity.getWebhookUrl();
         this.enabled = entity.isEnabled();
+        this.type = entity.getType();
     }
 }

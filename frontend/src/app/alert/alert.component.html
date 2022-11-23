@@ -59,7 +59,7 @@
         <form>
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label> <input type="text" class="form-control" id="name"
-                    name="name" [(ngModel)]="newAlert.name" placeholder="Optional">
+                    name="name" [(ngModel)]="newAlert.name">
             </div>
             <div class="mb-3">
                 <label for="dataSourceId" class="form-label">Data Source ID</label> <select class="form-select"
@@ -70,13 +70,25 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="webhookUrl" class="form-label">WebhookUrl</label> <input ngbAutofocus type="text"
-                    class="form-control" id="webhookUrl" name="webhookUrl" [(ngModel)]="newAlert.webhookUrl">
-            </div>
-            <div class="mb-3">
                 <label for="matchingString" class="form-label">Trigger Event</label> <input ngbAutofocus type="text"
                     class="form-control" id="matchingString" name="matchingString"
                     [(ngModel)]="newAlert.matchingString">
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Type</label> <select class="form-select"
+                    aria-label="Data Source Selection" id="type" name="type" [(ngModel)]="newAlert.type">
+                    <option value="DISCORD">Discord</option>
+                </select>
+            </div>
+            <div *ngIf="newAlert.type === 'DISCORD'">
+                <h5>
+                    <fa-icon [icon]="faDiscord"></fa-icon> Discord
+                </h5>
+                <hr>
+                <div class="mb-3">
+                    <label for="webhookUrl" class="form-label">WebhookUrl</label> <input ngbAutofocus type="text"
+                        class="form-control" id="webhookUrl" name="webhookUrl" [(ngModel)]="newAlert.webhookUrl">
+                </div>
             </div>
         </form>
     </div>

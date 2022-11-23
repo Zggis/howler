@@ -26,9 +26,11 @@ public class AlertEntity {
 
     private String matchingString;
 
-    private String webhookUrl;
-
     private boolean enabled = true;
+
+    private String type;
+
+    private String webhookUrl;
 
     public AlertEntity(AlertDTO alertDTO) {
         this.name = alertDTO.getName();
@@ -36,5 +38,6 @@ public class AlertEntity {
         this.matchingString = alertDTO.getMatchingString();
         this.webhookUrl = alertDTO.getWebhookUrl();
         this.enabled = alertDTO.isEnabled();
+        this.type = alertDTO.getType();
     }
 }
