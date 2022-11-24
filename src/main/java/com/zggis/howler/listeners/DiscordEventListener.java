@@ -29,7 +29,7 @@ public class DiscordEventListener {
         if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
             discordWebhook.setContent("Alert - " + alert.getName() + " was triggered!");
             DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
-            embed.setColor(Color.GREEN);
+            embed.setColor(getColor());
             embed.setDescription(event);
             embed.setThumbnail(THMB_URL);
             discordWebhook.addEmbed(embed);
@@ -45,7 +45,7 @@ public class DiscordEventListener {
         logger.info("Testing alert {}", alert.getName());
         discordWebhook.setContent("Testing - " + alert.getName());
         DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
-        embed.setColor(Color.GREEN);
+        embed.setColor(getColor());
         embed.setDescription("This is a test message.");
         embed.setThumbnail(THMB_URL);
         discordWebhook.addEmbed(embed);
@@ -54,5 +54,17 @@ public class DiscordEventListener {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    private Color getColor() {
+        Color c = Color.GREEN;
+        if ("RED".equals(alert.getColor())) {
+            c = Color.RED;
+        } else if ("BLUE".equals(alert.getColor())) {
+            c = Color.BLUE;
+        } else if ("YELLOW".equals(alert.getColor())) {
+            c = Color.YELLOW;
+        }
+        return c;
     }
 }

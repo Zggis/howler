@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.awt.*;
 
 @Entity
 @NoArgsConstructor
@@ -32,6 +33,8 @@ public class AlertEntity {
 
     private String webhookUrl;
 
+    private String color = Color.GREEN.toString();
+
     public AlertEntity(AlertDTO alertDTO) {
         this.name = alertDTO.getName();
         this.dataSourceId = alertDTO.getDataSourceId();
@@ -39,5 +42,6 @@ public class AlertEntity {
         this.webhookUrl = alertDTO.getWebhookUrl();
         this.enabled = alertDTO.isEnabled();
         this.type = alertDTO.getType();
+        this.color = alertDTO.getColor();
     }
 }

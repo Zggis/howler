@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.awt.*;
 import java.io.Serializable;
 
 @Getter
@@ -28,6 +29,8 @@ public class AlertDTO implements Serializable {
 
     private String webhookUrl;
 
+    private String color = Color.GREEN.toString();
+
     public AlertDTO(AlertEntity entity) {
         this.id = entity.getId();
         this.name = entity.getName();
@@ -36,5 +39,6 @@ public class AlertDTO implements Serializable {
         this.webhookUrl = entity.getWebhookUrl();
         this.enabled = entity.isEnabled();
         this.type = entity.getType();
+        this.color = entity.getColor();
     }
 }

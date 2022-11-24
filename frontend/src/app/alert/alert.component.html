@@ -96,6 +96,15 @@
                     <label for="webhookUrl" class="form-label">WebhookUrl</label> <input ngbAutofocus type="text"
                         class="form-control" id="webhookUrl" name="webhookUrl" [(ngModel)]="newAlert.webhookUrl">
                 </div>
+                <div class="mb-3">
+                    <label for="color" class="form-label">Color</label> <select class="form-select"
+                        aria-label="Data Source Selection" id="color" name="color" [(ngModel)]="newAlert.color">
+                        <option value="GREEN">Green</option>
+                        <option value="RED">Red</option>
+                        <option value="BLUE">Blue</option>
+                        <option value="YELLOW">Yellow</option>
+                    </select>
+                </div>
             </div>
         </form>
     </div>

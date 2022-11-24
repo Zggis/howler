@@ -14,7 +14,7 @@ export class AlertComponent implements OnInit {
 
   alerts: Alert[] = [];
   dataSources: DataSource[] = [];
-  newAlert: Alert = new Alert('', -1, -1, '', '', '', true, 'DISCORD');
+  newAlert: Alert = new Alert('', -1, -1, '', '', true, 'DISCORD', '', 'GREEN');
 
   faPlus = faPlus;
   faBell = faBell;
@@ -32,7 +32,7 @@ export class AlertComponent implements OnInit {
       alerts.forEach(alert =>
         this.dataSources.forEach(ds => {
           if (ds.id == alert.dataSourceId) {
-            this.alerts.push(new Alert(alert.name, alert.id, alert.dataSourceId, ds.path, alert.webhookUrl, alert.matchingString, alert.enabled, alert.type));
+            this.alerts.push(new Alert(alert.name, alert.id, alert.dataSourceId, ds.path, alert.matchingString, alert.enabled, alert.type, alert.webhookUrl, alert.color));
           }
         }
         )
@@ -69,7 +69,7 @@ export class AlertComponent implements OnInit {
   }
 
   reset() {
-    this.newAlert = new Alert('', -1, -1, '', '', '', true, 'DISCORD');
+    this.newAlert = new Alert('', -1, -1, '', '', true, 'DISCORD', '', 'GREEN');
     if (this.dataSources.length > 0) {
       this.newAlert.dataSourceId = this.dataSources[0].id;
     }

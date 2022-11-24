@@ -10,10 +10,11 @@ export class Alert {
     public id: number,
     public dataSourceId: number,
     public dataSourcePath: string,
-    public webhookUrl: string,
     public matchingString: string,
     public enabled: boolean,
-    public type: string
+    public type: string,
+    public webhookUrl: string,
+    public color: string
   ) { }
 }
 
