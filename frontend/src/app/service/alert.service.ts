@@ -90,4 +90,8 @@ export class AlertService {
       response => this.updateAlert(response)
     );
   }
+
+  testAlert(id: number) {
+    this.httpClient.post('http://' + this.host + ':' + this.port + '/rest/alert/test/' + id, null).subscribe();
+  }
 }

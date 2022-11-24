@@ -59,6 +59,10 @@ export class AlertComponent implements OnInit {
     this.alertService.disableAlert(id);
   }
 
+  testAlert(id: number) {
+    this.alertService.testAlert(id);
+  }
+
   openModal(content: any) {
     this.reset();
     this.modalService.open(content);

@@ -12,7 +12,9 @@
     </div>
 </div>
 
-<p class="text-center mt-5" *ngIf="alerts.length == 0"><fa-icon [icon]="faFaceFrown"></fa-icon> You have not setup any alerts yet.</p>
+<p class="text-center mt-5" *ngIf="alerts.length == 0">
+    <fa-icon [icon]="faFaceFrown"></fa-icon> You have not setup any alerts yet.
+</p>
 
 <table class="table table-dark" *ngIf="alerts.length > 0">
     <thead>
@@ -39,9 +41,10 @@
                         Action
                     </button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem (click)="testAlert(alert.id);" onclick="blur();">Test</button>
                         <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable</button>
-                        <button ngbDropdownItem (click)="disableAlert(alert.id);" onclick="blur();">Disable</button>
-                        <button ngbDropdownItem>Test</button>
+                        <button ngbDropdownItem style="color:orange" (click)="disableAlert(alert.id);"
+                            onclick="blur();">Disable</button>
                         <div class="dropdown-divider"></div>
                         <button ngbDropdownItem style="color:red" (click)="deleteAlert(alert.id);"
                             onclick="blur();">Remove</button>

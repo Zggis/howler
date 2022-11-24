@@ -12,6 +12,7 @@ import java.io.IOException;
 public class DiscordEventListener {
 
     private static final Logger logger = LoggerFactory.getLogger(DiscordEventListener.class);
+    public static final String THMB_URL = "https://raw.githubusercontent.com/Zggis/howler/master/favicon.webp";
 
     private final DiscordWebhook discordWebhook;
 
@@ -30,13 +31,28 @@ public class DiscordEventListener {
             DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
             embed.setColor(Color.GREEN);
             embed.setDescription(event);
-            embed.setThumbnail("https://raw.githubusercontent.com/Zggis/howler/master/favicon.webp");
+            embed.setThumbnail(THMB_URL);
             discordWebhook.addEmbed(embed);
             try {
                 discordWebhook.execute();
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
             }
+        }
+    }
+
+    public void test() {
+        logger.info("Testing alert {}", alert.getName());
+        discordWebhook.setContent("Testing - " + alert.getName());
+        DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
+        embed.setColor(Color.GREEN);
+        embed.setDescription("This is a test message.");
+        embed.setThumbnail(THMB_URL);
+        discordWebhook.addEmbed(embed);
+        try {
+            discordWebhook.execute();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
         }
     }
 }

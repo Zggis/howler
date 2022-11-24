@@ -109,4 +109,12 @@ public class AlertServiceImpl implements AlertService {
         }
         return null;
     }
+
+    @Override
+    public void test(Long id) {
+        DiscordEventListener discordEventListener = listeners.get(id);
+        if(discordEventListener != null) {
+            discordEventListener.test();
+        }
+    }
 }

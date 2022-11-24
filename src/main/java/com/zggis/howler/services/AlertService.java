@@ -10,4 +10,6 @@ public interface AlertService {
     void deleteById(Long id);
 
     AlertEntity setEnabled(Long id, boolean enabled);
+
+    void test(Long id);
 }

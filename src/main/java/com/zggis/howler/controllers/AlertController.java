@@ -71,4 +71,11 @@ public class AlertController {
         AlertEntity alertEntity = alertService.setEnabled(id, false);
         return ResponseEntity.ok(new AlertDTO(alertEntity));
     }
+
+    @Operation(summary = "Test alert")
+    @RequestMapping(value = "/test/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?> testAlert(@PathVariable Long id) {
+        alertService.test(id);
+        return ResponseEntity.ok(null);
+    }
 }
