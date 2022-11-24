@@ -10,3 +10,22 @@ body {
 .navbar {
     background: rgba(88, 88, 88, 1) !important;
 }
+
+/*
+.btn-outline-primary:hover {
+    background: rgb(104, 67, 32) !important;
+    color: rgb(255, 255, 255) !important;
+}
+
+.btn-outline-primary {
+    color: rgb(104, 67, 32) !important;
+    border-color: rgb(104, 67, 32) !important;
+}*/
+
+.table > thead > tr > th {
+    background: rgb(49, 25, 25) !important;
+}
+
+.table > tbody > tr > td {
+    background: rgb(72, 39, 8) !important;
+ }

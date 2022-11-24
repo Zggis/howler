@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faPlus, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faBell, faTriangleExclamation, faFaceFrown } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { Alert, AlertService } from 'src/app/service/alert.service';
 import { DataSource, DatasourceService } from 'src/app/service/datasource.service';
@@ -19,6 +19,8 @@ export class AlertComponent implements OnInit {
   faPlus = faPlus;
   faBell = faBell;
   faDiscord = faDiscord;
+  faTriangleExclamation = faTriangleExclamation;
+  faFaceFrown = faFaceFrown;
 
   constructor(private alertService: AlertService, private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
@@ -64,6 +66,9 @@ export class AlertComponent implements OnInit {
 
   reset() {
     this.newAlert = new Alert('', -1, -1, '', '', '', true, 'DISCORD');
+    if (this.dataSources.length > 0) {
+      this.newAlert.dataSourceId = this.dataSources[0].id;
+    }
   }
 
 }

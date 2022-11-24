@@ -3,14 +3,18 @@
     <h1 class="h2">Alerts</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openModal(addAlertModal);"
+            <button type="button" class="btn btn-sm btn-outline-dark"
+                (click)="dataSources.length > 0 ? openModal(addAlertModal) : openModal(noDataSources);"
                 onclick="blur();">
                 Add Alert <fa-icon [icon]="faPlus"></fa-icon>
             </button>
         </div>
     </div>
 </div>
-<table class="table table-dark">
+
+<p class="text-center mt-5" *ngIf="alerts.length == 0"><fa-icon [icon]="faFaceFrown"></fa-icon> You have not setup any alerts yet.</p>
+
+<table class="table table-dark" *ngIf="alerts.length > 0">
     <thead>
         <tr>
             <th scope="col">Name</th>
@@ -29,9 +33,9 @@
                 <span *ngIf="alert.enabled == true" class="badge text-bg-success">Enabled</span>
                 <span *ngIf="alert.enabled == false" class="badge text-bg-danger">Disabled</span>
             </td>
-            <td>
+            <td class="text-end">
                 <div ngbDropdown class="d-inline-block">
-                    <button type="button" class="btn btn-sm btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                    <button type="button" class="btn btn-sm btn-dark" id="dropdownBasic1" ngbDropdownToggle>
                         Action
                     </button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -50,7 +54,7 @@
 
 <ng-template #addAlertModal let-modal>
     <div class="modal-header">
-        <h5 class="modal-title" id="newTVShowModalLabel">
+        <h5 class="modal-title">
             <fa-icon [icon]="faBell"></fa-icon> Add Alert
         </h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
@@ -95,7 +99,24 @@
     <div class="modal-footer">
         <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
             (click)="modal.dismiss()">Cancel <i class="fa-solid fa-xmark"></i></button>
-        <button type="button" class="btn btn-success" (click)="addAlert()">Add Alert <fa-icon [icon]="faPlus"></fa-icon>
+        <button type="button" class="btn btn-success" (click)="addAlert()">Add Alert <fa-icon [icon]="faPlus">
+            </fa-icon>
         </button>
+    </div>
+</ng-template>
+
+<ng-template #noDataSources let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">
+            <fa-icon [icon]="faTriangleExclamation"></fa-icon> No Data Sources
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <p>You must add a Data Source before you can add an alert.</p>
+    </div>
+    <div class="modal-footer">
+        <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="modal.dismiss()">Close <i class="fa-solid fa-xmark"></i></button>
     </div>
 </ng-template>

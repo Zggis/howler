@@ -3,14 +3,15 @@
     <h1 class="h2">Data Sources</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openModal(addDataSourceModal);"
+            <button type="button" class="btn btn-sm btn-outline-dark" (click)="openModal(addDataSourceModal);"
                 onclick="blur();">
                 Add Data Source <fa-icon [icon]="faPlus"></fa-icon>
             </button>
         </div>
     </div>
 </div>
-<table class="table table-dark">
+<p class="text-center mt-5" *ngIf="dataSources.length == 0"><fa-icon [icon]="faFaceFrown"></fa-icon> You have not setup any data sources yet.</p>
+<table class="table table-dark" *ngIf="dataSources.length > 0">
     <thead>
         <tr>
             <th scope="col">Path</th>
@@ -20,9 +21,9 @@
     <tbody>
         <tr *ngFor="let dataSource of dataSources">
             <td>{{dataSource.path}}</td>
-            <td>
+            <td class="text-end">
                 <div ngbDropdown class="d-inline-block">
-                    <button type="button" class="btn btn-sm btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                    <button type="button" class="btn btn-sm btn-dark" id="dropdownBasic1" ngbDropdownToggle>
                         Action
                     </button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -46,15 +47,18 @@
     <div class="modal-body">
         <form>
             <div class="mb-3">
-                <label for="name" class="form-label">Path</label> <input type="text" class="form-control" id="name"
-                    name="name" [(ngModel)]="newDataSource.path">
+                <label for="name" class="form-label">Path</label> <input type="text" class="form-control" #name
+                    id="name" name="name" [(ngModel)]="newDataSource.path">
+                <div class="invalid-feedback">
+                    Please enter a valid directory path.
+                </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
             (click)="modal.dismiss()">Cancel <i class="fa-solid fa-xmark"></i></button>
-        <button type="button" class="btn btn-success" (click)="addDataSource()">Add Data Source <fa-icon
+        <button type="button" class="btn btn-success" (click)="addDataSource(name)">Add Data Source <fa-icon
                 [icon]="faPlus">
             </fa-icon>
         </button>

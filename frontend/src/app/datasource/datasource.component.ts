@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faPlus, faFolder } from '@fortawesome/free-solid-svg-icons';
+import { faFaceFrown, faFolder, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataSource, DatasourceService } from '../service/datasource.service';
 
@@ -12,6 +12,7 @@ export class DatasourceComponent implements OnInit {
 
   faPlus = faPlus;
   faFolder = faFolder;
+  faFaceFrown = faFaceFrown;
   newDataSource: DataSource = new DataSource(-1, '');
 
   dataSources: DataSource[] = [];
@@ -23,9 +24,14 @@ export class DatasourceComponent implements OnInit {
     this.dataSourceService.getDataSources();
   }
 
-  addDataSource() {
-    this.dataSourceService.addDataSource(this.newDataSource);
-    this.modalService.dismissAll();
+  addDataSource(nameInput: HTMLInputElement) {
+    if (this.newDataSource.path !== '') {
+      nameInput.classList.remove('is-invalid');
+      this.dataSourceService.addDataSource(this.newDataSource);
+      this.modalService.dismissAll();
+    } else {
+      nameInput.classList.add('is-invalid');
+    }
   }
 
   deleteDataSource(id: number) {
