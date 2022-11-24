@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, of, throwError } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -26,6 +26,9 @@ export class AlertService {
   private alerts = new BehaviorSubject<Alert[]>([]);
   currentAlerts = this.alerts.asObservable();
 
+  private alertError = new BehaviorSubject<String>("");
+  currentAlertError = this.alertError.asObservable();
+
   private port: string;
   private host: string = this.document.location.hostname;
 
@@ -51,8 +54,22 @@ export class AlertService {
   }
 
   addAlert(request: Alert) {
-    this.httpClient.post<Alert>('http://' + this.host + ':' + this.port + '/rest/alert', request).subscribe(
-      response => response != null ? this.alerts.next([...this.alerts.value, response]) : {}
+    this.httpClient.post<Alert>('http://' + this.host + ':' + this.port + '/rest/alert', request).pipe(
+      catchError(error => {
+        if (error.status == 400) {
+          this.alertError.next("Alert was not added because some of the information you provided was incorrect or conflicted with an existing alert.");
+        } else {
+          this.alertError.next("An unexpected error occured while trying to add the alert.");
+        }
+        return throwError(() => new Error("Failed to add alert"));
+      })
+    ).subscribe(
+      response => {
+        if (response != null) {
+          this.alerts.next([...this.alerts.value, response]);
+          this.alertError.next("");
+        }
+      }
     );
   }
 

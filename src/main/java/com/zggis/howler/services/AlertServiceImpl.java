@@ -74,11 +74,15 @@ public class AlertServiceImpl implements AlertService {
     public void deleteById(Long id) {
         Optional<AlertEntity> findById = alertRepo.findById(id);
         if (findById.isPresent()) {
+            alertRepo.deleteById(id);
             EventBus eventBus = dataSourceService.getEventBus(findById.get().getDataSourceId());
             if (eventBus != null) {
-                eventBus.unregister(listeners.get(id));
+                try {
+                    eventBus.unregister(listeners.get(id));
+                } catch (IllegalArgumentException ex) {
+                    logger.warn("The alert '{}' was already unregistered", findById.get().getName());
+                }
             }
-            alertRepo.deleteById(id);
         }
     }
 
@@ -113,7 +117,7 @@ public class AlertServiceImpl implements AlertService {
     @Override
     public void test(Long id) {
         DiscordEventListener discordEventListener = listeners.get(id);
-        if(discordEventListener != null) {
+        if (discordEventListener != null) {
             discordEventListener.test();
         }
     }

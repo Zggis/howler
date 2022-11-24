@@ -15,6 +15,7 @@ export class AlertComponent implements OnInit {
   alerts: Alert[] = [];
   dataSources: DataSource[] = [];
   newAlert: Alert = new Alert('', -1, -1, '', '', true, 'DISCORD', '', 'GREEN');
+  error: String = "";
 
   faPlus = faPlus;
   faBell = faBell;
@@ -25,6 +26,7 @@ export class AlertComponent implements OnInit {
   constructor(private alertService: AlertService, private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    this.alertService.currentAlertError.subscribe(error => this.error = error);
     this.dataSourceService.currentDatasources.subscribe(datasources => this.dataSources = datasources);
     this.dataSourceService.getDataSources();
     this.alertService.currentAlerts.subscribe(alerts => {
