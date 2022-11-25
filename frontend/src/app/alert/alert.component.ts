@@ -27,6 +27,7 @@ export class AlertComponent implements OnInit {
 
   ngOnInit(): void {
     this.alertService.currentAlertError.subscribe(error => this.error = error);
+    this.error = "";
     this.dataSourceService.currentDatasources.subscribe(datasources => this.dataSources = datasources);
     this.dataSourceService.getDataSources();
     this.alertService.currentAlerts.subscribe(alerts => {
@@ -44,9 +45,14 @@ export class AlertComponent implements OnInit {
     this.alertService.getAlerts();
   }
 
-  addAlert() {
-    this.alertService.addAlert(this.newAlert);
-    this.modalService.dismissAll();
+  addAlert(nameInput: HTMLInputElement) {
+    if (this.newAlert.name !== '') {
+      nameInput.classList.remove('is-invalid');
+      this.alertService.addAlert(this.newAlert);
+      this.modalService.dismissAll();
+    } else {
+      nameInput.classList.add('is-invalid');
+    }
   }
 
   deleteAlert(id: number) {
@@ -67,7 +73,7 @@ export class AlertComponent implements OnInit {
 
   openModal(content: any) {
     this.reset();
-    this.modalService.open(content);
+    this.modalService.open(content, { size: 'lg' });
   }
 
   reset() {

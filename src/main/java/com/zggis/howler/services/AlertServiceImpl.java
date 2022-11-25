@@ -9,9 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +41,11 @@ public class AlertServiceImpl implements AlertService {
     @Override
     @Transactional
     public AlertEntity add(AlertEntity entity) {
+        Collection<AlertEntity> existingAlert = alertRepo.findByNameAndDataSourceIdAndMatchingString(entity.getName(), entity.getDataSourceId(), entity.getMatchingString());
+        if (!CollectionUtils.isEmpty(existingAlert)) {
+            logger.error("Alert was not created because an Alert with the same name, data source, and matching string exists.");
+            return null;
+        }
         Optional<DataSourceEntity> findByIdResult = dataSourceService.findById(entity.getDataSourceId());
         if (findByIdResult.isPresent()) {
             AlertEntity savedAlert = alertRepo.save(entity);

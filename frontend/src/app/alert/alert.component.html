@@ -67,28 +67,33 @@
     </div>
     <div class="modal-body">
         <form>
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label> <input type="text" class="form-control" id="name"
-                    name="name" [(ngModel)]="newAlert.name">
-            </div>
-            <div class="mb-3">
-                <label for="dataSourceId" class="form-label">Data Source ID</label> <select class="form-select"
-                    aria-label="Data Source Selection" id="dataSourceId" name="dataSourceId"
-                    [(ngModel)]="newAlert.dataSourceId">
-                    <option *ngFor="let dataSource of dataSources" [value]="dataSource.id">{{dataSource.path}}
-                    </option>
-                </select>
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="name" class="form-label">Name</label> <input #name type="text" class="form-control"
+                        id="name" name="name" [(ngModel)]="newAlert.name">
+                    <div class="invalid-feedback">
+                        Please enter a name.
+                    </div>
+                </div>
+                <div class="col-4">
+                    <label for="dataSourceId" class="form-label">Data Source ID</label> <select class="form-select"
+                        aria-label="Data Source Selection" id="dataSourceId" name="dataSourceId"
+                        [(ngModel)]="newAlert.dataSourceId">
+                        <option *ngFor="let dataSource of dataSources" [value]="dataSource.id">{{dataSource.path}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label for="type" class="form-label">Type</label> <select class="form-select"
+                        aria-label="Data Source Selection" id="type" name="type" [(ngModel)]="newAlert.type">
+                        <option value="DISCORD">Discord</option>
+                    </select>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="matchingString" class="form-label">Trigger Event</label> <input ngbAutofocus type="text"
                     class="form-control" id="matchingString" name="matchingString"
                     [(ngModel)]="newAlert.matchingString">
-            </div>
-            <div class="mb-3">
-                <label for="type" class="form-label">Type</label> <select class="form-select"
-                    aria-label="Data Source Selection" id="type" name="type" [(ngModel)]="newAlert.type">
-                    <option value="DISCORD">Discord</option>
-                </select>
             </div>
             <div *ngIf="newAlert.type === 'DISCORD'">
                 <h5>
@@ -114,7 +119,7 @@
     <div class="modal-footer">
         <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
             (click)="modal.dismiss()">Cancel <i class="fa-solid fa-xmark"></i></button>
-        <button type="button" class="btn btn-success" (click)="addAlert()">Add Alert <fa-icon [icon]="faPlus">
+        <button type="button" class="btn btn-success" (click)="addAlert(name)">Add Alert <fa-icon [icon]="faPlus">
             </fa-icon>
         </button>
     </div>
