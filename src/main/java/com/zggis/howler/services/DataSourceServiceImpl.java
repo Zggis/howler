@@ -3,6 +3,7 @@ package com.zggis.howler.services;
 import com.google.common.eventbus.EventBus;
 import com.zggis.howler.entity.AlertEntity;
 import com.zggis.howler.entity.DataSourceEntity;
+import com.zggis.howler.exceptions.InvalidDataSourceException;
 import com.zggis.howler.repositories.AlertRepo;
 import com.zggis.howler.repositories.DataSourceRepo;
 import com.zggis.howler.runners.FileWatcher;
@@ -58,14 +59,13 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     @Transactional
-    public DataSourceEntity add(DataSourceEntity entity) {
+    public DataSourceEntity add(DataSourceEntity entity) throws InvalidDataSourceException {
         if (CollectionUtils.isEmpty(dataSourceRepo.findByPath(entity.getPath()))) {
             DataSourceEntity saveResult = dataSourceRepo.save(entity);
             setupDataSource(saveResult);
             return saveResult;
         }
-        logger.error("Could not add Data Source for {} since one already exists for that path", entity.getPath());
-        return null;
+        throw new InvalidDataSourceException("Could not add Data Source for " + entity.getPath() + " since one already exists for that path", 410);
     }
 
     private void setupDataSource(DataSourceEntity saveResult) {

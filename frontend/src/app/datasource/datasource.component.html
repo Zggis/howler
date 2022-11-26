@@ -1,6 +1,9 @@
 <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2 mb-3 border-bottom border-dark">
     <h1 class="h2">Data Sources</h1>
+    <div *ngIf="error !== ''" class="alert alert-danger py-1 my-0" role="alert">
+        <fa-icon [icon]="faCircleExclamation"></fa-icon> {{error}}
+    </div>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-dark" (click)="openModal(addDataSourceModal);"
@@ -10,7 +13,9 @@
         </div>
     </div>
 </div>
-<p class="text-center mt-5" *ngIf="dataSources.length == 0"><fa-icon [icon]="faFaceFrown"></fa-icon> You have not setup any data sources yet.</p>
+<p class="text-center mt-5" *ngIf="dataSources.length == 0">
+    <fa-icon [icon]="faFaceFrown"></fa-icon> You have not setup any data sources yet.
+</p>
 <table class="table table-dark" *ngIf="dataSources.length > 0">
     <thead>
         <tr>
@@ -47,8 +52,10 @@
     <div class="modal-body">
         <form>
             <div class="mb-3">
-                <label for="name" class="form-label">Path</label> <input type="text" class="form-control" #name
-                    id="name" name="name" [(ngModel)]="newDataSource.path">
+                <label for="name" class="form-label">Path</label> <input ngbAutofocus type="text" class="form-control" #name
+                    id="name" name="name" placeholder="/example/directory" [(ngModel)]="newDataSource.path">
+                <div class="form-text">This is a container relative directory path where your log file(s) are. It must
+                    be mapped in the container's configuration.</div>
                 <div class="invalid-feedback">
                     Please enter a valid directory path.
                 </div>
@@ -57,7 +64,7 @@
     </div>
     <div class="modal-footer">
         <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-            (click)="modal.dismiss()">Cancel <i class="fa-solid fa-xmark"></i></button>
+            (click)="modal.dismiss()">Cancel <fa-icon [icon]="faXmark"></fa-icon></button>
         <button type="button" class="btn btn-success" (click)="addDataSource(name)">Add Data Source <fa-icon
                 [icon]="faPlus">
             </fa-icon>

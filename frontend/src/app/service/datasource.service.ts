@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -18,6 +18,9 @@ export class DatasourceService {
 
   private datasources = new BehaviorSubject<DataSource[]>([]);
   currentDatasources = this.datasources.asObservable();
+
+  private dsError = new BehaviorSubject<String>("");
+  currentDSError = this.dsError.asObservable();
 
   private port: string;
   private host: string = this.document.location.hostname;
@@ -44,7 +47,18 @@ export class DatasourceService {
   }
 
   addDataSource(request: DataSource) {
-    this.httpClient.post<DataSource>('http://' + this.host + ':' + this.port + '/rest/datasource', request).subscribe(
+    this.httpClient.post<DataSource>('http://' + this.host + ':' + this.port + '/rest/datasource', request).pipe(
+      catchError(error => {
+        if (error.status == 410) {
+          this.dsError.next("Data source was not created because a data source with the same path already exists.");
+        } else if (error.status == 411) {
+          this.dsError.next("Data source was not created because the path does not exist.");
+        } else {
+          this.dsError.next("An unexpected error occured while trying to add the data source.");
+        }
+        return throwError(() => new Error("Failed to add data source"));
+      })
+    ).subscribe(
       response => response != null ? this.datasources.next([...this.datasources.value, response]) : {}
     );
   }

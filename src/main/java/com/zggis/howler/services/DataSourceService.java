@@ -2,12 +2,13 @@ package com.zggis.howler.services;
 
 import com.google.common.eventbus.EventBus;
 import com.zggis.howler.entity.DataSourceEntity;
+import com.zggis.howler.exceptions.InvalidDataSourceException;
 
 import java.util.Optional;
 
 public interface DataSourceService {
 
-    DataSourceEntity add(DataSourceEntity entity);
+    DataSourceEntity add(DataSourceEntity entity) throws InvalidDataSourceException;
 
     Optional<DataSourceEntity> findById(Long id);
 

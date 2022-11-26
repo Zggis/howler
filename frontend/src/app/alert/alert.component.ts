@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faPlus, faBell, faTriangleExclamation, faFaceFrown } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faBell, faTriangleExclamation, faFaceFrown, faCircleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { Alert, AlertService } from 'src/app/service/alert.service';
 import { DataSource, DatasourceService } from 'src/app/service/datasource.service';
@@ -19,9 +19,11 @@ export class AlertComponent implements OnInit {
 
   faPlus = faPlus;
   faBell = faBell;
+  faXmark = faXmark;
   faDiscord = faDiscord;
   faTriangleExclamation = faTriangleExclamation;
   faFaceFrown = faFaceFrown;
+  faCircleExclamation = faCircleExclamation;
 
   constructor(private alertService: AlertService, private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
@@ -45,13 +47,23 @@ export class AlertComponent implements OnInit {
     this.alertService.getAlerts();
   }
 
-  addAlert(nameInput: HTMLInputElement) {
+  addAlert(nameInput: HTMLInputElement, triggerEventInput: HTMLInputElement) {
+    var valid = true;
     if (this.newAlert.name !== '') {
       nameInput.classList.remove('is-invalid');
+    } else {
+      valid = false;
+      nameInput.classList.add('is-invalid');
+    }
+    if (this.newAlert.matchingString !== '') {
+      triggerEventInput.classList.remove('is-invalid');
+    } else {
+      valid = false;
+      triggerEventInput.classList.add('is-invalid');
+    }
+    if (valid) {
       this.alertService.addAlert(this.newAlert);
       this.modalService.dismissAll();
-    } else {
-      nameInput.classList.add('is-invalid');
     }
   }
 

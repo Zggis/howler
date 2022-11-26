@@ -2,7 +2,7 @@
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2 mb-3 border-bottom border-dark">
     <h1 class="h2">Alerts</h1>
     <div *ngIf="error !== ''" class="alert alert-danger py-1 my-0" role="alert">
-        {{error}}
+        <fa-icon [icon]="faCircleExclamation"></fa-icon> {{error}}
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
@@ -69,8 +69,8 @@
         <form>
             <div class="row mb-3">
                 <div class="col-4">
-                    <label for="name" class="form-label">Name</label> <input #name type="text" class="form-control"
-                        id="name" name="name" [(ngModel)]="newAlert.name">
+                    <label for="name" class="form-label">Name</label> <input ngbAutofocus #name type="text"
+                        class="form-control" id="name" name="name" [(ngModel)]="newAlert.name">
                     <div class="invalid-feedback">
                         Please enter a name.
                     </div>
@@ -91,9 +91,13 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label for="matchingString" class="form-label">Trigger Event</label> <input ngbAutofocus type="text"
+                <label for="matchingString" class="form-label">Trigger Event</label> <input #triggerevent type="text"
                     class="form-control" id="matchingString" name="matchingString"
                     [(ngModel)]="newAlert.matchingString">
+                <div class="form-text">Case insensitive string to look for in a log statement.</div>
+                <div class="invalid-feedback">
+                    Please enter a string to match.
+                </div>
             </div>
             <div *ngIf="newAlert.type === 'DISCORD'">
                 <h5>
@@ -101,7 +105,7 @@
                 </h5>
                 <hr>
                 <div class="mb-3">
-                    <label for="webhookUrl" class="form-label">WebhookUrl</label> <input ngbAutofocus type="text"
+                    <label for="webhookUrl" class="form-label">WebhookUrl</label> <input #webhook type="text"
                         class="form-control" id="webhookUrl" name="webhookUrl" [(ngModel)]="newAlert.webhookUrl">
                 </div>
                 <div class="mb-3">
@@ -118,8 +122,9 @@
     </div>
     <div class="modal-footer">
         <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-            (click)="modal.dismiss()">Cancel <i class="fa-solid fa-xmark"></i></button>
-        <button type="button" class="btn btn-success" (click)="addAlert(name)">Add Alert <fa-icon [icon]="faPlus">
+            (click)="modal.dismiss()">Cancel <fa-icon [icon]="faXmark"></fa-icon></button>
+        <button type="button" class="btn btn-success" (click)="addAlert(name,triggerevent)">Add Alert <fa-icon
+                [icon]="faPlus">
             </fa-icon>
         </button>
     </div>

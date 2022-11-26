@@ -2,6 +2,7 @@ package com.zggis.howler.controllers;
 
 import com.zggis.howler.dto.AlertDTO;
 import com.zggis.howler.entity.AlertEntity;
+import com.zggis.howler.exceptions.InvalidAlertException;
 import com.zggis.howler.services.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
@@ -40,15 +41,16 @@ public class AlertController {
     public ResponseEntity<AlertDTO> addAlert(@RequestBody AlertDTO newAlert) {
         if (pattern.matcher(newAlert.getWebhookUrl()).matches()) {
             AlertEntity newEntity = new AlertEntity(newAlert);
-            AlertEntity result = alertService.add(newEntity);
-            if (result != null) {
+            try {
+                AlertEntity result = alertService.add(newEntity);
                 return ResponseEntity.ok(new AlertDTO(result));
-            } else {
-                return ResponseEntity.badRequest().build();
+            } catch (InvalidAlertException e) {
+                logger.error(e.getMessage());
+                return ResponseEntity.status(e.getStatusCode()).build();
             }
         }
         logger.error("Alert was not added because {} is not a valid Discord webhook", newAlert.getWebhookUrl());
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(412).build();
     }
 
     @Operation(summary = "Remove alert")

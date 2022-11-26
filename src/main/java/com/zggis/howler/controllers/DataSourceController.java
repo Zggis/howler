@@ -2,6 +2,7 @@ package com.zggis.howler.controllers;
 
 import com.zggis.howler.dto.DataSourceDTO;
 import com.zggis.howler.entity.DataSourceEntity;
+import com.zggis.howler.exceptions.InvalidDataSourceException;
 import com.zggis.howler.services.DataSourceService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
@@ -43,11 +44,16 @@ public class DataSourceController {
         boolean isDirectory = Files.isDirectory(file);   // Check if it's a directory
         if (exists && isDirectory) {
             DataSourceEntity newEntity = new DataSourceEntity(newDataSource);
-            DataSourceEntity result = dataSourceService.add(newEntity);
-            return ResponseEntity.ok(new DataSourceDTO(result));
+            try {
+                DataSourceEntity result = dataSourceService.add(newEntity);
+                return ResponseEntity.ok(new DataSourceDTO(result));
+            }catch(InvalidDataSourceException e){
+                logger.error(e.getMessage());
+                return ResponseEntity.status(e.getStatusCode()).build();
+            }
         }
         logger.error("Data Source was not created because {} is not a valid directory path", newDataSource.getPath());
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(411).build();
     }
 
     @Operation(summary = "Remove data source")

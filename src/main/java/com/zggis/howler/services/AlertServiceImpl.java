@@ -3,6 +3,7 @@ package com.zggis.howler.services;
 import com.google.common.eventbus.EventBus;
 import com.zggis.howler.entity.AlertEntity;
 import com.zggis.howler.entity.DataSourceEntity;
+import com.zggis.howler.exceptions.InvalidAlertException;
 import com.zggis.howler.listeners.DiscordEventListener;
 import com.zggis.howler.repositories.AlertRepo;
 import org.slf4j.Logger;
@@ -40,11 +41,10 @@ public class AlertServiceImpl implements AlertService {
 
     @Override
     @Transactional
-    public AlertEntity add(AlertEntity entity) {
+    public AlertEntity add(AlertEntity entity) throws InvalidAlertException {
         Collection<AlertEntity> existingAlert = alertRepo.findByNameAndDataSourceIdAndMatchingString(entity.getName(), entity.getDataSourceId(), entity.getMatchingString());
         if (!CollectionUtils.isEmpty(existingAlert)) {
-            logger.error("Alert was not created because an Alert with the same name, data source, and matching string exists.");
-            return null;
+            throw new InvalidAlertException("Alert was not created because an Alert with the same name, data source, and matching string exists.", 410);
         }
         Optional<DataSourceEntity> findByIdResult = dataSourceService.findById(entity.getDataSourceId());
         if (findByIdResult.isPresent()) {
@@ -52,8 +52,7 @@ public class AlertServiceImpl implements AlertService {
             setupAlert(savedAlert);
             return savedAlert;
         }
-        logger.error("Alert was not created because Data Source {} does not exist.", entity.getDataSourceId());
-        return null;
+        throw new InvalidAlertException("Alert was not created because Data Source " + entity.getDataSourceId() + " does not exist.", 411);
     }
 
     private void setupAlert(AlertEntity savedAlert) {

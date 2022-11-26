@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faFaceFrown, faFolder, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFaceFrown, faFolder, faPlus, faCircleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataSource, DatasourceService } from '../service/datasource.service';
 
@@ -13,13 +13,18 @@ export class DatasourceComponent implements OnInit {
   faPlus = faPlus;
   faFolder = faFolder;
   faFaceFrown = faFaceFrown;
+  faCircleExclamation = faCircleExclamation;
+  faXmark = faXmark;
   newDataSource: DataSource = new DataSource(-1, '');
+  error: String = "";
 
   dataSources: DataSource[] = [];
 
   constructor(private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    this.dataSourceService.currentDSError.subscribe(error => this.error = error);
+    this.error = "";
     this.dataSourceService.currentDatasources.subscribe(datasources => this.dataSources = datasources);
     this.dataSourceService.getDataSources();
   }

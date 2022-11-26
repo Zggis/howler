@@ -56,8 +56,12 @@ export class AlertService {
   addAlert(request: Alert) {
     this.httpClient.post<Alert>('http://' + this.host + ':' + this.port + '/rest/alert', request).pipe(
       catchError(error => {
-        if (error.status == 400) {
-          this.alertError.next("Alert was not added because some of the information you provided was incorrect or conflicted with an existing alert.");
+        if (error.status == 410) {
+          this.alertError.next("Alert was not created because an Alert with the same name, data source, and trigger event exists.");
+        } else if (error.status == 411) {
+          this.alertError.next("Alert was not created because the selected Data Source no longer exists.");
+        } else if (error.status == 412) {
+          this.alertError.next("Alert was not added because the Discord webhook is not valid.");
         } else {
           this.alertError.next("An unexpected error occured while trying to add the alert.");
         }
