@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { faCoffee, faBell, faFolder, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -12,4 +13,5 @@ export class AppComponent {
   faBell = faBell;
   faFolder = faFolder;
   faGear = faGear;
+  faGithub = faGithub;
 }
