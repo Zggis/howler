@@ -14,7 +14,9 @@ export class Alert {
     public enabled: boolean,
     public type: string,
     public webhookUrl: string,
-    public color: string
+    public color: string,
+    public serverUrl:string,
+    public token:string
   ) { }
 }
 
@@ -62,7 +64,11 @@ export class AlertService {
           this.alertError.next("Alert was not created because the selected Data Source no longer exists.");
         } else if (error.status == 412) {
           this.alertError.next("Alert was not added because the Discord webhook is not valid.");
-        } else {
+        } else if (error.status == 413) {
+          this.alertError.next("Alert was not added because the Gotify server url is not valid.");
+        }else if (error.status == 414) {
+          this.alertError.next("Alert was not added because the Gotify API key was empty.");
+        }else {
           this.alertError.next("An unexpected error occured while trying to add the alert.");
         }
         return throwError(() => new Error("Failed to add alert"));

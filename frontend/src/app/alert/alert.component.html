@@ -87,6 +87,7 @@
                     <label for="type" class="form-label">Type</label> <select class="form-select"
                         aria-label="Data Source Selection" id="type" name="type" [(ngModel)]="newAlert.type">
                         <option value="DISCORD">Discord</option>
+                        <option value="GOTIFY">Gotify</option>
                     </select>
                 </div>
             </div>
@@ -94,7 +95,7 @@
                 <label for="matchingString" class="form-label">Trigger Event</label> <input #triggerevent type="text"
                     class="form-control" id="matchingString" name="matchingString"
                     [(ngModel)]="newAlert.matchingString">
-                <div class="form-text">Case insensitive string to look for in a log statement.</div>
+                <div class="form-text">Case insensitive string to look for in a log message.</div>
                 <div class="invalid-feedback">
                     Please enter a string to match.
                 </div>
@@ -105,7 +106,7 @@
                 </h5>
                 <hr>
                 <div class="mb-3">
-                    <label for="webhookUrl" class="form-label">WebhookUrl</label> <input #webhook type="text"
+                    <label for="webhookUrl" class="form-label">WebhookUrl</label> <input type="text"
                         class="form-control" id="webhookUrl" name="webhookUrl" [(ngModel)]="newAlert.webhookUrl">
                 </div>
                 <div class="mb-3">
@@ -116,6 +117,22 @@
                         <option value="BLUE">Blue</option>
                         <option value="YELLOW">Yellow</option>
                     </select>
+                </div>
+            </div>
+            <div *ngIf="newAlert.type === 'GOTIFY'">
+                <h5>
+                    <fa-icon [icon]="faKiwiBird"></fa-icon> Gotify
+                </h5>
+                <hr>
+                <div class="mb-3">
+                    <label for="serverUrl" class="form-label">Server URL</label> <input type="text" class="form-control"
+                        id="serverUrl" name="serverUrl" [(ngModel)]="newAlert.serverUrl">
+                </div>
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <label for="token" class="form-label">API Token</label> <input type="text" class="form-control"
+                            id="token" name="token" [(ngModel)]="newAlert.token">
+                    </div>
                 </div>
             </div>
         </form>

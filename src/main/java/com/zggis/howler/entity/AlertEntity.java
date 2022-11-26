@@ -31,9 +31,15 @@ public class AlertEntity {
 
     private String type;
 
+    //Discord
     private String webhookUrl;
 
     private String color = Color.GREEN.toString();
+
+    //Gotify
+    private String serverUrl;
+
+    private String token;
 
     public AlertEntity(AlertDTO alertDTO) {
         this.name = alertDTO.getName();
@@ -43,5 +49,7 @@ public class AlertEntity {
         this.enabled = alertDTO.isEnabled();
         this.type = alertDTO.getType();
         this.color = alertDTO.getColor();
+        this.serverUrl=alertDTO.getServerUrl();
+        this.token = alertDTO.getToken();
     }
 }

@@ -13,15 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/rest/alert")
 public class AlertController {
 
     private static final Logger logger = LoggerFactory.getLogger(AlertController.class);
-
-    private static final Pattern pattern = Pattern.compile("^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     @Autowired
     private AlertService alertService;
@@ -39,18 +36,14 @@ public class AlertController {
     @Operation(summary = "Add new alert")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<AlertDTO> addAlert(@RequestBody AlertDTO newAlert) {
-        if (pattern.matcher(newAlert.getWebhookUrl()).matches()) {
-            AlertEntity newEntity = new AlertEntity(newAlert);
-            try {
-                AlertEntity result = alertService.add(newEntity);
-                return ResponseEntity.ok(new AlertDTO(result));
-            } catch (InvalidAlertException e) {
-                logger.error(e.getMessage());
-                return ResponseEntity.status(e.getStatusCode()).build();
-            }
+        AlertEntity newEntity = new AlertEntity(newAlert);
+        try {
+            AlertEntity result = alertService.add(newEntity);
+            return ResponseEntity.ok(new AlertDTO(result));
+        } catch (InvalidAlertException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(e.getStatusCode()).build();
         }
-        logger.error("Alert was not added because {} is not a valid Discord webhook", newAlert.getWebhookUrl());
-        return ResponseEntity.status(412).build();
     }
 
     @Operation(summary = "Remove alert")

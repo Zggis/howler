@@ -27,9 +27,15 @@ public class AlertDTO implements Serializable {
 
     private String type;
 
+    //Discord
     private String webhookUrl;
 
     private String color = Color.GREEN.toString();
+
+    //Gotify
+    private String serverUrl;
+
+    private String token;
 
     public AlertDTO(AlertEntity entity) {
         this.id = entity.getId();
@@ -40,5 +46,7 @@ public class AlertDTO implements Serializable {
         this.enabled = entity.isEnabled();
         this.type = entity.getType();
         this.color = entity.getColor();
+        this.serverUrl = entity.getServerUrl();
+        this.token = entity.getToken();
     }
 }

@@ -1,8 +1,17 @@
 <header class="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow">
   <div class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
-    <h5 class="my-0 py-0">
-      <img src="/assets/favicon.webp" height="40px"> Howler
-    </h5>
+    <div class="row">
+      <div class="col-auto">
+        <h5 class="my-0 py-0">
+          <img src="/assets/favicon.webp" height="40px"> Howler
+        </h5>
+      </div>
+      <div class="col-auto d-flex">
+        <span class="mt-auto">
+          <fa-icon [icon]="faAt"></fa-icon> v{{version}}
+        </span>
+      </div>
+    </div>
   </div>
   <div class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-end">
     <h5 class="my-0 py-0">
