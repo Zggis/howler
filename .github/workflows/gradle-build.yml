@@ -23,7 +23,7 @@ jobs:
         with:
             node-version: 14.15.4
             
-      - name: npm dependencies
+      - name: Install NPM
         run: npm install
       
       - name: Build with Gradle
