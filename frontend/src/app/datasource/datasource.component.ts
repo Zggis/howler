@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faFaceFrown, faFolder, faPlus, faCircleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faFaceFrown, faFolder, faPlus, faCircleExclamation, faXmark, faTriangleExclamation, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataSource, DatasourceService } from '../service/datasource.service';
 
@@ -14,9 +14,12 @@ export class DatasourceComponent implements OnInit {
   faFolder = faFolder;
   faFaceFrown = faFaceFrown;
   faCircleExclamation = faCircleExclamation;
+  faTriangleExclamation = faTriangleExclamation;
   faXmark = faXmark;
+  faTrashCan = faTrashCan;
   newDataSource: DataSource = new DataSource(-1, '');
   error: String = "";
+  preDeleteId: number = -1;
 
   dataSources: DataSource[] = [];
 
@@ -39,8 +42,14 @@ export class DatasourceComponent implements OnInit {
     }
   }
 
-  deleteDataSource(id: number) {
-    this.dataSourceService.deleteDataSource(id);
+  preDelete(id: number) {
+    this.preDeleteId = id;
+  }
+
+  deleteDataSource() {
+    this.dataSourceService.deleteDataSource(this.preDeleteId);
+    this.preDeleteId = -1;
+    this.modalService.dismissAll();
   }
 
   openModal(content: any) {

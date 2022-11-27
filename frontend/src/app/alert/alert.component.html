@@ -16,7 +16,7 @@
 </div>
 
 <p class="text-center mt-5" *ngIf="alerts.length == 0">
-    <fa-icon [icon]="faFaceFrown"></fa-icon> You have not setup any alerts yet.
+    <fa-icon [icon]="faFaceFrown" size="xl"></fa-icon> You have not setup any alerts yet.
 </p>
 
 <table class="table table-dark" *ngIf="alerts.length > 0">
@@ -24,6 +24,7 @@
         <tr>
             <th scope="col">Name</th>
             <th scope="col">Trigger Event</th>
+            <th scope="col">Type</th>
             <th scope="col">Data Source</th>
             <th>Status</th>
             <th></th>
@@ -33,6 +34,14 @@
         <tr *ngFor="let alert of alerts">
             <td>{{alert.name}}</td>
             <td>{{alert.matchingString}}</td>
+            <td>
+                <div *ngIf="alert.type == 'DISCORD'">
+                    <fa-icon [icon]="faDiscord" [styles]="{'color': 'cornflowerblue'}"></fa-icon> Discord
+                </div>
+                <div *ngIf="alert.type == 'GOTIFY'">
+                    <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}"></fa-icon> Gotify
+                </div>
+            </td>
             <td>{{alert.dataSourcePath}}</td>
             <td>
                 <span *ngIf="alert.enabled == true" class="badge text-bg-success">Enabled</span>
@@ -44,13 +53,21 @@
                         Action
                     </button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button ngbDropdownItem (click)="testAlert(alert.id);" onclick="blur();">Test</button>
-                        <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable</button>
-                        <button ngbDropdownItem style="color:orange" (click)="disableAlert(alert.id);"
-                            onclick="blur();">Disable</button>
+                        <button *ngIf="alert.type == 'DISCORD'" ngbDropdownItem (click)="testAlert(alert.id);"
+                            onclick="blur();">Test <fa-icon [icon]="faDiscord" [styles]="{'color': 'cornflowerblue'}">
+                            </fa-icon></button>
+                        <button *ngIf="alert.type == 'GOTIFY'" ngbDropdownItem (click)="testAlert(alert.id);"
+                            onclick="blur();">Test <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}">
+                            </fa-icon></button>
+                        <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable <fa-icon
+                                [icon]="faBell" [styles]="{'color': 'green'}"></fa-icon></button>
+                        <button ngbDropdownItem (click)="disableAlert(alert.id);"
+                            onclick="blur();">Disable <fa-icon [icon]="faBellSlash" [styles]="{'color': 'maroon'}">
+                            </fa-icon></button>
                         <div class="dropdown-divider"></div>
                         <button ngbDropdownItem style="color:red" (click)="deleteAlert(alert.id);"
-                            onclick="blur();">Remove</button>
+                            onclick="blur();">Remove <fa-icon [icon]="faTrashCan" [styles]="{'color': 'red'}"></fa-icon>
+                            </button>
                     </div>
                 </div>
             </td>
@@ -61,7 +78,7 @@
 <ng-template #addAlertModal let-modal>
     <div class="modal-header">
         <h5 class="modal-title">
-            <fa-icon [icon]="faBell"></fa-icon> Add Alert
+            <fa-icon [icon]="faBell" [styles]="{'color': 'red'}"></fa-icon> Add Alert
         </h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
     </div>
@@ -76,9 +93,10 @@
                     </div>
                 </div>
                 <div class="col-4">
-                    <label for="dataSourceId" class="form-label">Data Source ID</label> <select class="form-select"
-                        aria-label="Data Source Selection" id="dataSourceId" name="dataSourceId"
-                        [(ngModel)]="newAlert.dataSourceId">
+                    <label for="dataSourceId" class="form-label">
+                        <fa-icon [icon]="faFolder" [styles]="{'color': 'burlywood'}"></fa-icon> Data Source
+                    </label> <select class="form-select" aria-label="Data Source Selection" id="dataSourceId"
+                        name="dataSourceId" [(ngModel)]="newAlert.dataSourceId">
                         <option *ngFor="let dataSource of dataSources" [value]="dataSource.id">{{dataSource.path}}
                         </option>
                     </select>
@@ -102,16 +120,20 @@
             </div>
             <div *ngIf="newAlert.type === 'DISCORD'">
                 <h5>
-                    <fa-icon [icon]="faDiscord"></fa-icon> Discord
+                    <fa-icon [icon]="faDiscord" [styles]="{'color': 'cornflowerblue'}"></fa-icon> Discord
                 </h5>
                 <hr>
                 <div class="mb-3">
-                    <label for="webhookUrl" class="form-label">WebhookUrl</label> <input type="text"
-                        class="form-control" id="webhookUrl" name="webhookUrl" [(ngModel)]="newAlert.webhookUrl">
+                    <label for="webhookUrl" class="form-label">
+                        <fa-icon [icon]="faLink"></fa-icon> Webhook URL
+                    </label> <input type="text" class="form-control" id="webhookUrl" name="webhookUrl"
+                        [(ngModel)]="newAlert.webhookUrl">
                 </div>
                 <div class="mb-3">
-                    <label for="color" class="form-label">Color</label> <select class="form-select"
-                        aria-label="Data Source Selection" id="color" name="color" [(ngModel)]="newAlert.color">
+                    <label for="color" class="form-label">
+                        <fa-icon [icon]="faPalette"></fa-icon> Color
+                    </label> <select class="form-select" aria-label="Data Source Selection" id="color" name="color"
+                        [(ngModel)]="newAlert.color">
                         <option value="GREEN">Green</option>
                         <option value="RED">Red</option>
                         <option value="BLUE">Blue</option>
@@ -121,17 +143,21 @@
             </div>
             <div *ngIf="newAlert.type === 'GOTIFY'">
                 <h5>
-                    <fa-icon [icon]="faKiwiBird"></fa-icon> Gotify
+                    <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}"></fa-icon> Gotify
                 </h5>
                 <hr>
                 <div class="mb-3">
-                    <label for="serverUrl" class="form-label">Server URL</label> <input type="text" class="form-control"
-                        id="serverUrl" name="serverUrl" [(ngModel)]="newAlert.serverUrl">
+                    <label for="serverUrl" class="form-label">
+                        <fa-icon [icon]="faLink"></fa-icon> Server URL
+                    </label> <input type="text" class="form-control" id="serverUrl" name="serverUrl"
+                        [(ngModel)]="newAlert.serverUrl">
                 </div>
                 <div class="mb-3">
                     <div class="mb-3">
-                        <label for="token" class="form-label">API Token</label> <input type="text" class="form-control"
-                            id="token" name="token" [(ngModel)]="newAlert.token">
+                        <label for="token" class="form-label">
+                            <fa-icon [icon]="faKey"></fa-icon> API Token
+                        </label> <input type="text" class="form-control" id="token" name="token"
+                            [(ngModel)]="newAlert.token">
                     </div>
                 </div>
             </div>
@@ -154,11 +180,11 @@
         </h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" ngbAutofocus>
         <p>You must add a Data Source before you can add an alert.</p>
     </div>
     <div class="modal-footer">
         <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-            (click)="modal.dismiss()">Close <i class="fa-solid fa-xmark"></i></button>
+            (click)="modal.dismiss()">Close <fa-icon [icon]="faXmark"></fa-icon></button>
     </div>
 </ng-template>
