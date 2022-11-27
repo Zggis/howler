@@ -25,6 +25,9 @@ jobs:
             
       - name: Install NPM
         run: npm install
+        
+      - name: Install NG
+        run: ng install
       
       - name: Build with Gradle
         run: ./gradlew assemble
