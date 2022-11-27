@@ -1,11 +1,15 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
 }
 
+def packageSlurper = new JsonSlurper()
+def packageJson = packageSlurper.parse file('frontend/package.json')
+version = packageJson.version
 group = 'com.zggis'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -21,7 +25,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'commons-io:commons-io:2.11.0'
-
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -38,7 +41,7 @@ task deleteStaticFolder(type: Delete) {
     }
 }
 
-//processResources.dependsOn('frontend:build')
+assemble.dependsOn('deleteStaticFolder','frontend:build')
 
 jar {
     enabled = false
