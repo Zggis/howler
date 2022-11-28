@@ -41,7 +41,7 @@ task deleteStaticFolder(type: Delete) {
     }
 }
 
-assemble.dependsOn('deleteStaticFolder','frontend:build')
+processResources.dependsOn('frontend:build')
 
 jar {
     enabled = false
