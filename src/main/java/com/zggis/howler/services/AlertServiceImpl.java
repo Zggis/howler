@@ -48,10 +48,7 @@ public class AlertServiceImpl implements AlertService {
     @Override
     @Transactional
     public AlertEntity add(AlertEntity newEntity) throws InvalidAlertException {
-        int result = validateAlert(newEntity);
-        if (result != 200) {
-            throw new InvalidAlertException("Alert failed validation", result);
-        }
+        validateAlert(newEntity);
         AlertEntity entity = sanitize(newEntity);
         Collection<AlertEntity> existingAlert = alertRepo.findByNameAndDataSourceIdAndMatchingString(entity.getName(), entity.getDataSourceId(), entity.getMatchingString());
         if (!CollectionUtils.isEmpty(existingAlert)) {
@@ -66,20 +63,16 @@ public class AlertServiceImpl implements AlertService {
         throw new InvalidAlertException("Alert was not created because Data Source " + entity.getDataSourceId() + " does not exist.", 411);
     }
 
-    private int validateAlert(AlertEntity entity) {
+    private void validateAlert(AlertEntity entity) throws InvalidAlertException {
         if ("DISCORD".equals(entity.getType()) && !pattern.matcher(entity.getWebhookUrl()).matches()) {
-            logger.error("Alert was not added because {} is not a valid Discord webhook", entity.getWebhookUrl());
-            return 412;
+            throw new InvalidAlertException("Alert was not added because " + entity.getWebhookUrl() + " is not a valid Discord webhook", 412);
         }
         if ("GOTIFY".equals(entity.getType()) && !pattern.matcher(entity.getServerUrl()).matches()) {
-            logger.error("Alert was not added because {} is not a valid Gotify server url", entity.getServerUrl());
-            return 413;
+            throw new InvalidAlertException("Alert was not added because " + entity.getServerUrl() + " is not a valid Gotify server url", 413);
         }
         if ("GOTIFY".equals(entity.getType()) && !StringUtils.hasText(entity.getToken())) {
-            logger.error("Alert was not added because the Gotify API key is empty");
-            return 414;
+            throw new InvalidAlertException("Alert was not added because the Gotify API key is empty", 414);
         }
-        return 200;
     }
 
     private AlertEntity sanitize(AlertEntity entity) {
