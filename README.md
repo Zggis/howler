@@ -46,9 +46,6 @@ CONFIG | PATH | /data/config | Map this to a directory where Howler can save its
 #### Optional Variables
 Container Variable | Default Value | Description
 --- | --- | ---
-PUID | 0 (99 in Unraid template) | Controls the user the container runs as.
-PGID | 0 (100 in Unraid template) | Controls the group the container runs as.
-UMASK | 0000 | Controls the UMASK the container uses.
 FILETYPES | txt,log | A comma separated string of file types that will be monitored by all data sources.
 LOGLEVEL | INFO | Set to DEBUG or TRACE to inclease the logging level for debugging.
 
