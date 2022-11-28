@@ -11,6 +11,7 @@ import com.zggis.howler.runners.FolderWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -37,6 +38,9 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Autowired
     private AlertRepo alertRepo;
+
+    @Value("${file.types}")
+    private String fileTypes;
 
     private final Map<Long, EventBus> eventBusses = new HashMap<>();
 
@@ -78,7 +82,7 @@ public class DataSourceServiceImpl implements DataSourceService {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                if (child.getName().endsWith(".txt") || child.getName().endsWith(".log")) {
+                if (isAcceptedFileExtension(child.getName())) {
                     executor.execute(new FileWatcher(child, eventBus));
                 }
             }
@@ -121,6 +125,17 @@ public class DataSourceServiceImpl implements DataSourceService {
             logger.info("{} alert was deleted since it was connected to the deleted Data Source {}", deletedAlert.getName(), id);
         }
         eventBusses.remove(id);
+    }
+
+    private boolean isAcceptedFileExtension(String fileName) {
+        String fileTypesSanitized = fileTypes.trim().replaceAll("[.]", "");
+        String[] extensions = fileTypesSanitized.split(",");
+        for (String extension : extensions) {
+            if (fileName.toLowerCase().endsWith("." + extension.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

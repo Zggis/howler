@@ -19,61 +19,66 @@
     <fa-icon [icon]="faFaceFrown" size="xl"></fa-icon> You have not setup any alerts yet.
 </p>
 
-<table class="table table-dark" *ngIf="alerts.length > 0">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Trigger Event</th>
-            <th scope="col">Type</th>
-            <th scope="col">Data Source</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let alert of alerts">
-            <td>{{alert.name}}</td>
-            <td>{{alert.matchingString}}</td>
-            <td>
-                <div *ngIf="alert.type == 'DISCORD'">
-                    <fa-icon [icon]="faDiscord" [styles]="{'color': 'cornflowerblue'}"></fa-icon> Discord
-                </div>
-                <div *ngIf="alert.type == 'GOTIFY'">
-                    <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}"></fa-icon> Gotify
-                </div>
-            </td>
-            <td>{{alert.dataSourcePath}}</td>
-            <td>
-                <span *ngIf="alert.enabled == true" class="badge text-bg-success">Enabled</span>
-                <span *ngIf="alert.enabled == false" class="badge text-bg-danger">Disabled</span>
-            </td>
-            <td class="text-end">
-                <div ngbDropdown class="d-inline-block">
-                    <button type="button" class="btn btn-sm btn-dark" id="dropdownBasic1" ngbDropdownToggle>
-                        Action
-                    </button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button *ngIf="alert.type == 'DISCORD'" ngbDropdownItem (click)="testAlert(alert.id);"
-                            onclick="blur();">Test <fa-icon [icon]="faDiscord" [styles]="{'color': 'cornflowerblue'}">
-                            </fa-icon></button>
-                        <button *ngIf="alert.type == 'GOTIFY'" ngbDropdownItem (click)="testAlert(alert.id);"
-                            onclick="blur();">Test <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}">
-                            </fa-icon></button>
-                        <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable <fa-icon
-                                [icon]="faBell" [styles]="{'color': 'green'}"></fa-icon></button>
-                        <button ngbDropdownItem (click)="disableAlert(alert.id);"
-                            onclick="blur();">Disable <fa-icon [icon]="faBellSlash" [styles]="{'color': 'maroon'}">
-                            </fa-icon></button>
-                        <div class="dropdown-divider"></div>
-                        <button ngbDropdownItem style="color:red" (click)="deleteAlert(alert.id);"
-                            onclick="blur();">Remove <fa-icon [icon]="faTrashCan" [styles]="{'color': 'red'}"></fa-icon>
-                            </button>
+<div *ngIf="alerts.length > 0" class="card m-0 p-0 border-0 shadow">
+    <table class="table table-dark m-0">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Trigger Event</th>
+                <th scope="col">Type</th>
+                <th scope="col">Data Source</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let alert of alerts">
+                <td>{{alert.name}}</td>
+                <td>{{alert.matchingString}}</td>
+                <td>
+                    <div *ngIf="alert.type == 'DISCORD'">
+                        <fa-icon [icon]="faDiscord" [styles]="{'color': 'cornflowerblue'}"></fa-icon> Discord
                     </div>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                    <div *ngIf="alert.type == 'GOTIFY'">
+                        <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}"></fa-icon> Gotify
+                    </div>
+                </td>
+                <td><fa-icon [icon]="faFolder" [styles]="{'color': 'burlywood'}"></fa-icon> {{alert.dataSourcePath}}</td>
+                <td>
+                    <span *ngIf="alert.enabled == true" class="badge text-bg-success">Enabled</span>
+                    <span *ngIf="alert.enabled == false" class="badge text-bg-danger">Disabled</span>
+                </td>
+                <td class="text-end">
+                    <div ngbDropdown class="d-inline-block">
+                        <button type="button" class="btn btn-sm btn-dark" id="dropdownBasic1" ngbDropdownToggle>
+                            Action
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <button *ngIf="alert.type == 'DISCORD'" ngbDropdownItem (click)="testAlert(alert.id);"
+                                onclick="blur();">Test <fa-icon [icon]="faDiscord"
+                                    [styles]="{'color': 'cornflowerblue'}">
+                                </fa-icon></button>
+                            <button *ngIf="alert.type == 'GOTIFY'" ngbDropdownItem (click)="testAlert(alert.id);"
+                                onclick="blur();">Test <fa-icon [icon]="faKiwiBird"
+                                    [styles]="{'color': 'lightskyblue'}">
+                                </fa-icon></button>
+                            <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable <fa-icon
+                                    [icon]="faBell" [styles]="{'color': 'green'}"></fa-icon></button>
+                            <button ngbDropdownItem (click)="disableAlert(alert.id);" onclick="blur();">Disable <fa-icon
+                                    [icon]="faBellSlash" [styles]="{'color': 'maroon'}">
+                                </fa-icon></button>
+                            <div class="dropdown-divider"></div>
+                            <button ngbDropdownItem style="color:red" (click)="deleteAlert(alert.id);"
+                                onclick="blur();">Remove <fa-icon [icon]="faTrashCan" [styles]="{'color': 'red'}">
+                                </fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <ng-template #addAlertModal let-modal>
     <div class="modal-header">

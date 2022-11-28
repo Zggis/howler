@@ -16,31 +16,34 @@
 <p class="text-center mt-5" *ngIf="dataSources.length == 0">
     <fa-icon [icon]="faFaceFrown" size="xl"></fa-icon> You have not setup any data sources yet.
 </p>
-<table class="table table-dark" *ngIf="dataSources.length > 0">
-    <thead>
-        <tr>
-            <th scope="col">Path</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let dataSource of dataSources">
-            <td>{{dataSource.path}}</td>
-            <td class="text-end">
-                <div ngbDropdown class="d-inline-block">
-                    <button type="button" class="btn btn-sm btn-dark" id="dropdownBasic1" ngbDropdownToggle>
-                        Action
-                    </button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+<div *ngIf="dataSources.length > 0" class="card m-0 p-0 border-0 shadow">
+    <table class="table m-0 table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Path</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let dataSource of dataSources">
+                <td>{{dataSource.path}}</td>
+                <td class="text-end">
+                    <div ngbDropdown class="d-inline-block">
+                        <button type="button" class="btn btn-sm btn-dark" id="dropdownBasic1" ngbDropdownToggle>
+                            Action
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
 
-                        <button ngbDropdownItem style="color:red" (click)="openModal(delete);preDelete(dataSource.id);"
-                            onclick="blur();">Remove <fa-icon [icon]="faTrashCan" [styles]="{'color': 'red'}"></fa-icon></button>
+                            <button ngbDropdownItem style="color:red"
+                                (click)="openModal(delete);preDelete(dataSource.id);" onclick="blur();">Remove <fa-icon
+                                    [icon]="faTrashCan" [styles]="{'color': 'red'}"></fa-icon></button>
+                        </div>
                     </div>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <ng-template #addDataSourceModal let-modal>
     <div class="modal-header">
@@ -88,6 +91,7 @@
             <fa-icon [icon]="faXmark"></fa-icon>
         </button>
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteDataSource()">Delete
-            <fa-icon [icon]="faTrashCan"></fa-icon></button>
+            <fa-icon [icon]="faTrashCan"></fa-icon>
+        </button>
     </div>
 </ng-template>
