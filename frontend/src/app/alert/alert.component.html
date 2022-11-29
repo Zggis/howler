@@ -43,7 +43,9 @@
                         <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}"></fa-icon> Gotify
                     </div>
                 </td>
-                <td><fa-icon [icon]="faFolder" [styles]="{'color': 'burlywood'}"></fa-icon> {{alert.dataSourcePath}}</td>
+                <td>
+                    <fa-icon [icon]="faFolder" [styles]="{'color': 'burlywood'}"></fa-icon> {{alert.dataSourcePath}}
+                </td>
                 <td>
                     <span *ngIf="alert.enabled == true" class="badge text-bg-success">Enabled</span>
                     <span *ngIf="alert.enabled == false" class="badge text-bg-danger">Disabled</span>
@@ -186,7 +188,7 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
     </div>
     <div class="modal-body" ngbAutofocus>
-        <p>You must add a Data Source before you can add an alert.</p>
+        <p>You must add a <a href="/datasources">Data Source</a> before you can add an alert.</p>
     </div>
     <div class="modal-footer">
         <button #cancelBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal"
