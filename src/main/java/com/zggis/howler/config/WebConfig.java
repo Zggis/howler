@@ -18,5 +18,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
         registry.addViewController("/settings").setViewName("forward:/");
+        registry.addViewController("/datasources").setViewName("forward:/");
     }
 }
