@@ -11,11 +11,11 @@ To install Howler on Unraid you can install the docker container through the com
 #### Docker Desktop
 You can run Howler on Docker locally by using the following command. Replace CONFIG with the directory you want the database to be saved to, and any other directories that contain your log files.
 ```
-$ docker run -v CONFIG:/data/config -v LOGS1:/data/logs1 LOGS2:/data/logs2 -p 8080:8080 zggis/howler:latest
+$ docker run -v CONFIG:/data/config -v LOGS1:/app1/logs LOGS2:/app2/logs -p 8080:8080 zggis/howler:latest
 ```
 Windows Example
 ```
-$ docker run -v "C:/temp":/data/config -v "C:/logs1":/data/logs1 -v "C:/logs2":/data/logs2 -p 8080:8080 zggis/howler:latest
+$ docker run -v "C:/temp":/data/config -v "C:/logs1":/app1/logs -v "C:/logs2":/app2/logs -p 8080:8080 zggis/howler:latest
 ```
 #### Java App
 You can run Howler as a Java program from command prompt. Java JRE 11 is required. To grab the latest Howler JAR, navigate to the <a href="https://github.com/Zggis/howler/releases">Releases</a> page. Run the JAR using this command.
