@@ -1,5 +1,6 @@
 package com.zggis.howler.listeners;
 
+import com.mgnt.utils.StringUnicodeEncoderDecoder;
 import com.zggis.howler.entity.AlertEntity;
 import com.zggis.howler.utils.DiscordWebhook;
 import org.slf4j.Logger;
@@ -26,10 +27,10 @@ public class DiscordEventListener implements EventListener {
     public void stringEvent(String event) {
         logger.debug("New Event: {}", event);
         if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
-            discordWebhook.setContent("Alert - " + alert.getName() + " was triggered!");
+            discordWebhook.setContent("Alert - " + StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getName()) + " was triggered!");
             DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
             embed.setColor(getColor());
-            embed.setDescription(event);
+            embed.setDescription(StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(event));
             embed.setThumbnail(THMB_URL);
             discordWebhook.addEmbed(embed);
             try {
