@@ -32,6 +32,8 @@ public class AlertDTO implements Serializable {
 
     private String color = Color.GREEN.toString();
 
+    private String username = "Howler";
+
     //Gotify
     private String serverUrl;
 
@@ -46,6 +48,7 @@ public class AlertDTO implements Serializable {
         this.enabled = entity.isEnabled();
         this.type = entity.getType();
         this.color = entity.getColor();
+        this.username = entity.getUsername();
         this.serverUrl = entity.getServerUrl();
         this.token = entity.getToken();
     }

@@ -131,6 +131,13 @@
                 </h5>
                 <hr>
                 <div class="mb-3">
+                    <label for="username" class="form-label">
+                        <fa-icon [icon]="faUser"></fa-icon> Username
+                    </label> <input type="text" class="form-control" id="username" name="username"
+                        [(ngModel)]="newAlert.username">
+                    <div class="form-text">Leave blank to use the webhook name.</div>
+                </div>
+                <div class="mb-3">
                     <label for="webhookUrl" class="form-label">
                         <fa-icon [icon]="faLink"></fa-icon> Webhook URL
                     </label> <input type="text" class="form-control" id="webhookUrl" name="webhookUrl"
