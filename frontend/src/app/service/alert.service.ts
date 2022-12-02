@@ -15,6 +15,7 @@ export class Alert {
     public type: string,
     public webhookUrl: string,
     public color: string,
+    public username: string,
     public serverUrl:string,
     public token:string
   ) { }

@@ -22,6 +22,9 @@ export class DatasourceService {
   private dsError = new BehaviorSubject<String>("");
   currentDSError = this.dsError.asObservable();
 
+  private fileExtensions = new BehaviorSubject<String[]>([]);
+  currentFileExtensions = this.fileExtensions.asObservable();
+
   private port: string;
   private host: string = this.document.location.hostname;
 
@@ -46,6 +49,12 @@ export class DatasourceService {
     );
   }
 
+  getFileExtensions() {
+    this.httpClient.get<String[]>('http://' + this.host + ':' + this.port + '/rest/datasource/extensions').subscribe(
+      response => this.fileExtensions.next(response)
+    );
+  }
+
   addDataSource(request: DataSource) {
     this.httpClient.post<DataSource>('http://' + this.host + ':' + this.port + '/rest/datasource', request).pipe(
       catchError(error => {
@@ -59,7 +68,12 @@ export class DatasourceService {
         return throwError(() => new Error("Failed to add data source"));
       })
     ).subscribe(
-      response => response != null ? this.datasources.next([...this.datasources.value, response]) : {}
+      response => {
+        if (response != null) {
+          this.datasources.next([...this.datasources.value, response]);
+          this.dsError.next("");
+        }
+      }
     );
   }
 
