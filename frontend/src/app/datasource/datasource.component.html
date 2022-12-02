@@ -17,16 +17,20 @@
     <fa-icon [icon]="faFaceFrown" size="xl"></fa-icon> You have not setup any data sources yet.
 </p>
 <div *ngIf="dataSources.length > 0" class="card m-0 p-0 border-0 shadow">
-    <table class="table m-0 table-dark">
+    <table class="table m-0 table-dark table-bordered">
         <thead>
             <tr>
                 <th scope="col">Path</th>
+                <th scope="col">Monitored File Types</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let dataSource of dataSources">
+            <tr *ngFor="let dataSource of dataSources; let i = index">
                 <td>{{dataSource.path}}</td>
+                <td *ngIf="i == 0" rowspan="0" class="align-middle">
+                    <span *ngFor="let string of fileExtensions" class="badge text-bg-primary mx-1">{{string}}</span>
+                </td>
                 <td class="text-end">
                     <div ngbDropdown class="d-inline-block">
                         <button type="button" class="btn btn-sm btn-dark" id="dropdownBasic1" ngbDropdownToggle>
@@ -43,6 +47,11 @@
             </tr>
         </tbody>
     </table>
+</div>
+
+<div *ngIf="dataSources.length > 0" class="alert alert-dark mt-3" role="alert">
+    To add/update monitoried file types, set FILETYPES as described <a
+        href="https://github.com/Zggis/howler#optional-variables" target="_blank">here.</a>
 </div>
 
 <ng-template #addDataSourceModal let-modal>

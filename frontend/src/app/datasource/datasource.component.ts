@@ -22,6 +22,7 @@ export class DatasourceComponent implements OnInit {
   preDeleteId: number = -1;
 
   dataSources: DataSource[] = [];
+  fileExtensions: String[] = [];
 
   constructor(private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
@@ -30,6 +31,8 @@ export class DatasourceComponent implements OnInit {
     this.error = "";
     this.dataSourceService.currentDatasources.subscribe(datasources => this.dataSources = datasources);
     this.dataSourceService.getDataSources();
+    this.dataSourceService.currentFileExtensions.subscribe(fileExtensions => this.fileExtensions = fileExtensions);
+    this.dataSourceService.getFileExtensions();
   }
 
   addDataSource(nameInput: HTMLInputElement) {
