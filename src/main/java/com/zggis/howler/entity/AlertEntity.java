@@ -36,6 +36,8 @@ public class AlertEntity {
 
     private String color = Color.GREEN.toString();
 
+    private String username = "Howler";
+
     //Gotify
     private String serverUrl;
 
@@ -49,6 +51,7 @@ public class AlertEntity {
         this.enabled = alertDTO.isEnabled();
         this.type = alertDTO.getType();
         this.color = alertDTO.getColor();
+        this.username = alertDTO.getUsername();
         this.serverUrl=alertDTO.getServerUrl();
         this.token = alertDTO.getToken();
     }

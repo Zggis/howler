@@ -27,6 +27,7 @@ public class DiscordEventListener implements EventListener {
     public void stringEvent(String event) {
         logger.debug("New Event: {}", event);
         if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
+            discordWebhook.setUsername(StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getUsername()));
             discordWebhook.setContent("Alert - " + StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getName()) + " was triggered!");
             DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
             embed.setColor(getColor());
@@ -44,10 +45,11 @@ public class DiscordEventListener implements EventListener {
     @Override
     public void test() {
         logger.info("Testing alert {}", alert.getName());
-        discordWebhook.setContent("Testing - " + alert.getName());
+        discordWebhook.setUsername(StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getUsername()));
+        discordWebhook.setContent("Testing - " + StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getName()));
         DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
         embed.setColor(getColor());
-        embed.setDescription("This is a test message.");
+        embed.setDescription("This is a test message. Log text will be displayed here.");
         embed.setThumbnail(THMB_URL);
         discordWebhook.addEmbed(embed);
         try {
