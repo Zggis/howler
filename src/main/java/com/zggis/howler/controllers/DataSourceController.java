@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,9 @@ public class DataSourceController {
     @Autowired
     private DataSourceService dataSourceService;
 
+    @Value("${file.types}")
+    private String fileExtensions;
+
     @Operation(summary = "Fetch all data sources")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<List<DataSourceDTO>> fetchAllDataSources() {
@@ -40,14 +44,14 @@ public class DataSourceController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<DataSourceDTO> addDataSource(@RequestBody DataSourceDTO newDataSource) {
         Path file = new File(newDataSource.getPath()).toPath();
-        boolean exists = Files.exists(file);        // Check if the file exists
-        boolean isDirectory = Files.isDirectory(file);   // Check if it's a directory
+        boolean exists = Files.exists(file);
+        boolean isDirectory = Files.isDirectory(file);
         if (exists && isDirectory) {
             DataSourceEntity newEntity = new DataSourceEntity(newDataSource);
             try {
                 DataSourceEntity result = dataSourceService.add(newEntity);
                 return ResponseEntity.ok(new DataSourceDTO(result));
-            }catch(InvalidDataSourceException e){
+            } catch (InvalidDataSourceException e) {
                 logger.error(e.getMessage());
                 return ResponseEntity.status(e.getStatusCode()).build();
             }
@@ -61,5 +65,15 @@ public class DataSourceController {
     public ResponseEntity<DataSourceDTO> removeDataSource(@PathVariable Long id) {
         dataSourceService.deleteById(id);
         return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "Fetch file types")
+    @RequestMapping(value = "/extensions", method = RequestMethod.GET)
+    public ResponseEntity<List<String>> fetchAllFileTypes() {
+        List<String> result = new ArrayList<>();
+        for (String ext : fileExtensions.split(",")) {
+            result.add(ext.toUpperCase());
+        }
+        return ResponseEntity.ok(result);
     }
 }
