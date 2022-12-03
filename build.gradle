@@ -47,3 +47,7 @@ processResources.dependsOn('frontend:build')
 jar {
     enabled = false
 }
+
+springBoot {
+    buildInfo()
+}
