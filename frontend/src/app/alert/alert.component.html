@@ -42,6 +42,9 @@
                     <div *ngIf="alert.type == 'GOTIFY'">
                         <fa-icon [icon]="faKiwiBird" [styles]="{'color': 'lightskyblue'}"></fa-icon> Gotify
                     </div>
+                    <div *ngIf="alert.type == 'SLACK'">
+                        <fa-icon [icon]="faSlack"></fa-icon> Slack
+                    </div>
                 </td>
                 <td>
                     <fa-icon [icon]="faFolder" [styles]="{'color': 'burlywood'}"></fa-icon> {{alert.dataSourcePath}}
@@ -63,6 +66,9 @@
                             <button *ngIf="alert.type == 'GOTIFY'" ngbDropdownItem (click)="testAlert(alert.id);"
                                 onclick="blur();">Test <fa-icon [icon]="faKiwiBird"
                                     [styles]="{'color': 'lightskyblue'}">
+                                </fa-icon></button>
+                            <button *ngIf="alert.type == 'SLACK'" ngbDropdownItem (click)="testAlert(alert.id);"
+                                onclick="blur();">Test <fa-icon [icon]="faSlack">
                                 </fa-icon></button>
                             <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable <fa-icon
                                     [icon]="faBell" [styles]="{'color': 'green'}"></fa-icon></button>
@@ -113,6 +119,7 @@
                         aria-label="Data Source Selection" id="type" name="type" [(ngModel)]="newAlert.type">
                         <option value="DISCORD">Discord</option>
                         <option value="GOTIFY">Gotify</option>
+                        <option value="SLACK">Slack</option>
                     </select>
                 </div>
             </div>
@@ -173,6 +180,18 @@
                         </label> <input type="text" class="form-control" id="token" name="token"
                             [(ngModel)]="newAlert.token">
                     </div>
+                </div>
+            </div>
+            <div *ngIf="newAlert.type === 'SLACK'">
+                <h5>
+                    <fa-icon [icon]="faSlack"></fa-icon> Slack
+                </h5>
+                <hr>
+                <div class="mb-3">
+                    <label for="webhookUrl" class="form-label">
+                        <fa-icon [icon]="faLink"></fa-icon> Webhook URL
+                    </label> <input type="text" class="form-control" id="webhookUrl" name="webhookUrl"
+                        [(ngModel)]="newAlert.webhookUrl">
                 </div>
             </div>
         </form>

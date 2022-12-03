@@ -7,6 +7,7 @@ import com.zggis.howler.exceptions.InvalidAlertException;
 import com.zggis.howler.listeners.DiscordEventListener;
 import com.zggis.howler.listeners.EventListener;
 import com.zggis.howler.listeners.GotifyEventListener;
+import com.zggis.howler.listeners.SlackEventListener;
 import com.zggis.howler.repositories.AlertRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class AlertServiceImpl implements AlertService {
 
     private static final Logger logger = LoggerFactory.getLogger(AlertServiceImpl.class);
 
-    private static final Pattern pattern = Pattern.compile("^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    private static final Pattern WEBHOOK_PATTERN = Pattern.compile("^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     @Autowired
     private AlertRepo alertRepo;
@@ -64,14 +65,17 @@ public class AlertServiceImpl implements AlertService {
     }
 
     private void validateAlert(AlertEntity entity) throws InvalidAlertException {
-        if ("DISCORD".equals(entity.getType()) && !pattern.matcher(entity.getWebhookUrl()).matches()) {
+        if ("DISCORD".equals(entity.getType()) && !WEBHOOK_PATTERN.matcher(entity.getWebhookUrl()).matches()) {
             throw new InvalidAlertException("Alert was not added because " + entity.getWebhookUrl() + " is not a valid Discord webhook", 412);
         }
-        if ("GOTIFY".equals(entity.getType()) && !pattern.matcher(entity.getServerUrl()).matches()) {
+        if ("GOTIFY".equals(entity.getType()) && !WEBHOOK_PATTERN.matcher(entity.getServerUrl()).matches()) {
             throw new InvalidAlertException("Alert was not added because " + entity.getServerUrl() + " is not a valid Gotify server url", 413);
         }
         if ("GOTIFY".equals(entity.getType()) && !StringUtils.hasText(entity.getToken())) {
             throw new InvalidAlertException("Alert was not added because the Gotify API key is empty", 414);
+        }
+        if ("SLACK".equals(entity.getType()) && !WEBHOOK_PATTERN.matcher(entity.getWebhookUrl()).matches()) {
+            throw new InvalidAlertException("Alert was not added because " + entity.getWebhookUrl() + " is not a valid Slack webhook", 412);
         }
     }
 
@@ -93,6 +97,8 @@ public class AlertServiceImpl implements AlertService {
                 listener = new DiscordEventListener(savedAlert);
             } else if ("GOTIFY".equals(savedAlert.getType())) {
                 listener = new GotifyEventListener(savedAlert);
+            } else if ("SLACK".equals(savedAlert.getType())) {
+                listener = new SlackEventListener(savedAlert);
             }
             if (listener == null) {
                 logger.warn("Unable to setup alert '{}' because notification type is invalid. This Alert will be deleted.", savedAlert.getName());
