@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faPlus, faBell, faTriangleExclamation, faFaceFrown, faCircleExclamation, faXmark, faKiwiBird, faLink, faPalette, faKey, faFolder, faTrashCan, faBellSlash, faUser } from '@fortawesome/free-solid-svg-icons';
-import { faDiscord } from '@fortawesome/free-brands-svg-icons';
+import { faDiscord, faSlack } from '@fortawesome/free-brands-svg-icons';
 import { Alert, AlertService } from 'src/app/service/alert.service';
 import { DataSource, DatasourceService } from 'src/app/service/datasource.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -32,6 +32,7 @@ export class AlertComponent implements OnInit {
   faFolder = faFolder;
   faTrashCan = faTrashCan;
   faUser = faUser;
+  faSlack = faSlack;
 
   constructor(private alertService: AlertService, private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
