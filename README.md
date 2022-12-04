@@ -3,7 +3,7 @@
 ## <div align="right"><a href="https://www.buymeacoffee.com/zggis" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a></div>
 
 ### Description
-Howler is a log file monitoring application that allows you to setup notifications for specific events in log files. Currently Discord and Gotify are supported notification platforms. Unlike other log analysis tools, Howler is simple and easy to configure.
+Howler is a log file monitoring application that allows you to setup notifications for specific events in log files. Currently Discord, Gotify, and Slack are supported notification platforms. Unlike other log analysis tools, Howler is simple and easy to configure.
 
 ### Installing
 #### Unraid
