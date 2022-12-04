@@ -20,11 +20,14 @@ public class SlackEventListener implements EventListener {
 
     @Override
     public void stringEvent(String event) {
-        Payload payload = Payload.builder().text(event).build();
-        try {
-            Slack.getInstance().send(alert.getWebhookUrl(), payload);
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+        logger.debug("New Event: {}", event);
+        if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
+            Payload payload = Payload.builder().text(event).build();
+            try {
+                Slack.getInstance().send(alert.getWebhookUrl(), payload);
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+            }
         }
     }
 
