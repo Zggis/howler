@@ -121,7 +121,7 @@ public class AlertServiceImpl implements AlertService {
         if (findById.isPresent()) {
             alertRepo.deleteById(id);
             EventBus eventBus = dataSourceService.getEventBus(findById.get().getDataSourceId());
-            if (eventBus != null) {
+            if (eventBus != null && listeners.get(id) != null) {
                 try {
                     eventBus.unregister(listeners.get(id));
                 } catch (IllegalArgumentException ex) {
