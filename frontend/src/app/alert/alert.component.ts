@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { faPlus, faBell, faTriangleExclamation, faFaceFrown, faCircleExclamation, faXmark, faKiwiBird, faLink, faPalette, faKey, faFolder, faTrashCan, faBellSlash, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { faFloppyDisk, faPenToSquare, faClone, faPlus, faBell, faTriangleExclamation, faFaceFrown, faCircleExclamation, faXmark, faKiwiBird, faLink, faPalette, faKey, faFolder, faTrashCan, faBellSlash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faSlack } from '@fortawesome/free-brands-svg-icons';
 import { Alert, AlertService } from 'src/app/service/alert.service';
 import { DataSource, DatasourceService } from 'src/app/service/datasource.service';
@@ -11,6 +11,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./alert.component.css']
 })
 export class AlertComponent implements OnInit {
+
+  @ViewChild("addAlertModal")
+  addAlertModal!: NgbModal;
+
+  @ViewChild("updateAlertModal")
+  updateAlertModal!: NgbModal;
 
   alerts: Alert[] = [];
   dataSources: DataSource[] = [];
@@ -33,6 +39,9 @@ export class AlertComponent implements OnInit {
   faTrashCan = faTrashCan;
   faUser = faUser;
   faSlack = faSlack;
+  faClone = faClone;
+  faPenToSquare = faPenToSquare;
+  faFloppyDisk = faFloppyDisk;
 
   constructor(private alertService: AlertService, private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
@@ -74,6 +83,39 @@ export class AlertComponent implements OnInit {
       this.alertService.addAlert(this.newAlert);
       this.modalService.dismissAll();
     }
+  }
+
+  updateAlert(nameInput: HTMLInputElement, triggerEventInput: HTMLInputElement) {
+    var valid = true;
+    if (this.newAlert.name !== '') {
+      nameInput.classList.remove('is-invalid');
+    } else {
+      valid = false;
+      nameInput.classList.add('is-invalid');
+    }
+    if (this.newAlert.matchingString !== '') {
+      triggerEventInput.classList.remove('is-invalid');
+    } else {
+      valid = false;
+      triggerEventInput.classList.add('is-invalid');
+    }
+    if (valid) {
+      this.alertService.editAlert(this.newAlert);
+      this.modalService.dismissAll();
+    }
+  }
+
+  cloneAlert(alert: Alert) {
+    this.reset();
+    this.newAlert = Object.assign({}, alert);
+    this.newAlert.name = '';
+    this.modalService.open(this.addAlertModal, { size: 'lg' });
+  }
+
+  editAlert(alert: Alert) {
+    this.reset();
+    this.newAlert = Object.assign({}, alert);
+    this.modalService.open(this.updateAlertModal, { size: 'lg' });
   }
 
   deleteAlert(id: number) {
