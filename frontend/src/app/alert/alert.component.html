@@ -70,6 +70,9 @@
                             <button *ngIf="alert.type == 'SLACK'" ngbDropdownItem (click)="testAlert(alert.id);"
                                 onclick="blur();">Test <fa-icon [icon]="faSlack">
                                 </fa-icon></button>
+                                <button ngbDropdownItem (click)="cloneAlert(alert);" onclick="blur();">Clone <fa-icon
+                                    [icon]="faClone">
+                                </fa-icon></button>
                             <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable <fa-icon
                                     [icon]="faBell" [styles]="{'color': 'green'}"></fa-icon></button>
                             <button ngbDropdownItem (click)="disableAlert(alert.id);" onclick="blur();">Disable <fa-icon
