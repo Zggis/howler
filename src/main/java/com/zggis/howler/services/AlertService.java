@@ -6,6 +6,8 @@ import com.zggis.howler.exceptions.InvalidAlertException;
 public interface AlertService {
     AlertEntity add(AlertEntity entity) throws InvalidAlertException;
 
+    AlertEntity update(Long id, String name, String matchingString) throws InvalidAlertException;
+
     Iterable<AlertEntity> findAll();
 
     void deleteById(Long id);

@@ -70,6 +70,9 @@
                             <button *ngIf="alert.type == 'SLACK'" ngbDropdownItem (click)="testAlert(alert.id);"
                                 onclick="blur();">Test <fa-icon [icon]="faSlack">
                                 </fa-icon></button>
+                                <button ngbDropdownItem (click)="editAlert(alert);" onclick="blur();">Edit <fa-icon
+                                    [icon]="faPenToSquare">
+                                </fa-icon></button>
                                 <button ngbDropdownItem (click)="cloneAlert(alert);" onclick="blur();">Clone <fa-icon
                                     [icon]="faClone">
                                 </fa-icon></button>
@@ -204,6 +207,45 @@
             (click)="modal.dismiss()">Cancel <fa-icon [icon]="faXmark"></fa-icon></button>
         <button type="button" class="btn btn-success" (click)="addAlert(name,triggerevent)">Add Alert <fa-icon
                 [icon]="faPlus">
+            </fa-icon>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #updateAlertModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">
+            <fa-icon [icon]="faPenToSquare" [styles]="{'color': 'red'}"></fa-icon> Update Alert
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="name" class="form-label">Name</label> <input ngbAutofocus #editname type="text"
+                        class="form-control" name="name" [(ngModel)]="newAlert.name">
+                    <div class="invalid-feedback">
+                        Please enter a name.
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="matchingString" class="form-label">Trigger Event</label> <input #edittriggerevent type="text"
+                    class="form-control" name="matchingString"
+                    [(ngModel)]="newAlert.matchingString">
+                <div class="form-text">Case insensitive string to look for in a log message.</div>
+                <div class="invalid-feedback">
+                    Please enter a string to match.
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="modal.dismiss()">Cancel <fa-icon [icon]="faXmark"></fa-icon></button>
+        <button type="button" class="btn btn-success" (click)="updateAlert(editname,edittriggerevent)">Save Alert <fa-icon
+                [icon]="faFloppyDisk">
             </fa-icon>
         </button>
     </div>

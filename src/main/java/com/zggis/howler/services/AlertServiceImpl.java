@@ -51,10 +51,7 @@ public class AlertServiceImpl implements AlertService {
     public AlertEntity add(AlertEntity newEntity) throws InvalidAlertException {
         validateAlert(newEntity);
         AlertEntity entity = sanitize(newEntity);
-        Collection<AlertEntity> existingAlert = alertRepo.findByNameAndDataSourceIdAndMatchingString(entity.getName(), entity.getDataSourceId(), entity.getMatchingString());
-        if (!CollectionUtils.isEmpty(existingAlert)) {
-            throw new InvalidAlertException("Alert was not created because an Alert with the same name, data source, and matching string exists.", 410);
-        }
+        checkForExisting(entity);
         Optional<DataSourceEntity> findByIdResult = dataSourceService.findById(entity.getDataSourceId());
         if (findByIdResult.isPresent()) {
             AlertEntity savedAlert = alertRepo.save(entity);
@@ -62,6 +59,29 @@ public class AlertServiceImpl implements AlertService {
             return savedAlert;
         }
         throw new InvalidAlertException("Alert was not created because Data Source " + entity.getDataSourceId() + " does not exist.", 411);
+    }
+
+    private void checkForExisting(AlertEntity entity) {
+        Collection<AlertEntity> existingAlert = alertRepo.findByNameAndDataSourceIdAndMatchingString(entity.getName(), entity.getDataSourceId(), entity.getMatchingString());
+        if (!CollectionUtils.isEmpty(existingAlert)) {
+            throw new InvalidAlertException("Alert was not created/updated because an Alert with the same name, data source, and matching string exists.", 410);
+        }
+    }
+
+    @Override
+    public AlertEntity update(Long id, String name, String matchingString) throws InvalidAlertException {
+        Optional<AlertEntity> findByID = alertRepo.findById(id);
+        if(findByID.isPresent()){
+            findByID.get().setName(name);
+            findByID.get().setMatchingString(matchingString);
+            checkForExisting(findByID.get());
+            AlertEntity savedAlert = alertRepo.save(findByID.get());
+            deleteAlertListener(savedAlert);
+            setupAlert(savedAlert);
+            return savedAlert;
+        }else{
+            throw new InvalidAlertException("Alert was not updated because the alert does not exist.", 415);
+        }
     }
 
     private void validateAlert(AlertEntity entity) throws InvalidAlertException {
@@ -126,14 +146,19 @@ public class AlertServiceImpl implements AlertService {
         Optional<AlertEntity> findById = alertRepo.findById(id);
         if (findById.isPresent()) {
             alertRepo.deleteById(id);
-            EventBus eventBus = dataSourceService.getEventBus(findById.get().getDataSourceId());
-            if (eventBus != null && listeners.get(id) != null) {
-                try {
-                    eventBus.unregister(listeners.get(id));
-                } catch (IllegalArgumentException ex) {
-                    logger.warn("The alert '{}' was already unregistered", findById.get().getName());
-                }
+            deleteAlertListener(findById.get());
+        }
+    }
+
+    private void deleteAlertListener(AlertEntity alert) {
+        EventBus eventBus = dataSourceService.getEventBus(alert.getDataSourceId());
+        if (eventBus != null && listeners.get(alert.getId()) != null) {
+            try {
+                eventBus.unregister(listeners.get(alert.getId()));
+            } catch (IllegalArgumentException ex) {
+                logger.warn("The alert '{}' was already unregistered", alert.getName());
             }
+            listeners.remove(alert.getId());
         }
     }
 
