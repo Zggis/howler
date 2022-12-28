@@ -59,19 +59,7 @@ export class AlertService {
   addAlert(request: Alert) {
     this.httpClient.post<Alert>('http://' + this.host + ':' + this.port + '/rest/alert', request).pipe(
       catchError(error => {
-        if (error.status == 410) {
-          this.alertError.next("Alert was not created because an Alert with the same name, data source, and trigger event exists.");
-        } else if (error.status == 411) {
-          this.alertError.next("Alert was not created because the selected Data Source no longer exists.");
-        } else if (error.status == 412) {
-          this.alertError.next("Alert was not added because the Discord webhook is not valid.");
-        } else if (error.status == 413) {
-          this.alertError.next("Alert was not added because the Gotify server url is not valid.");
-        }else if (error.status == 414) {
-          this.alertError.next("Alert was not added because the Gotify API key was empty.");
-        }else {
-          this.alertError.next("An unexpected error occured while trying to add the alert.");
-        }
+        this.handleError(error);
         return throwError(() => new Error("Failed to add alert"));
       })
     ).subscribe(
@@ -82,6 +70,49 @@ export class AlertService {
         }
       }
     );
+  }
+
+  editAlert(request: Alert) {
+    this.httpClient.put<Alert>('http://' + this.host + ':' + this.port + '/rest/alert', request).pipe(
+      catchError(error => {
+        this.handleError(error);
+        return throwError(() => new Error("Failed to add alert"));
+      })
+    ).subscribe(
+      response => {
+
+
+        const alertsUpdated = this.alerts.getValue().map((alert) => {
+          if (alert.id === response.id) {
+            return { ...response }
+          }
+          return alert;
+        })
+        this.alerts.next(alertsUpdated);
+
+/*
+        if (response != null) {
+          this.alerts.next([...this.alerts.value, response]);
+          this.alertError.next("");
+        }*/
+      }
+    );
+  }
+
+  private handleError(error: any) {
+    if (error.status == 410) {
+      this.alertError.next("Alert was not created/updated because an Alert with the same name, data source, and trigger event exists.");
+    } else if (error.status == 411) {
+      this.alertError.next("Alert was not created because the selected Data Source no longer exists.");
+    } else if (error.status == 412) {
+      this.alertError.next("Alert was not added because the Discord webhook is not valid.");
+    } else if (error.status == 413) {
+      this.alertError.next("Alert was not added because the Gotify server url is not valid.");
+    } else if (error.status == 414) {
+      this.alertError.next("Alert was not added because the Gotify API key was empty.");
+    } else {
+      this.alertError.next("An unexpected error occured while trying to add the alert.");
+    }
   }
 
   deleteAlert(id: number) {

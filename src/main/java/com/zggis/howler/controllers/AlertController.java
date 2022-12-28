@@ -46,6 +46,18 @@ public class AlertController {
         }
     }
 
+    @Operation(summary = "Edit alert")
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    public ResponseEntity<AlertDTO> updateAlert(@RequestBody AlertDTO updatedAlert) {
+        try {
+            AlertEntity result = alertService.update(updatedAlert.getId(), updatedAlert.getName(), updatedAlert.getMatchingString());
+            return ResponseEntity.ok(new AlertDTO(result));
+        } catch (InvalidAlertException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(e.getStatusCode()).build();
+        }
+    }
+
     @Operation(summary = "Remove alert")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<AlertDTO> removeAlert(@PathVariable Long id) {
