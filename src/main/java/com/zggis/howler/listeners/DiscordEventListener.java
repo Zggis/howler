@@ -14,12 +14,9 @@ public class DiscordEventListener implements EventListener {
     private static final Logger logger = LoggerFactory.getLogger(DiscordEventListener.class);
     public static final String THMB_URL = "https://raw.githubusercontent.com/Zggis/howler/master/favicon.webp";
 
-    private final DiscordWebhook discordWebhook;
-
     private final AlertEntity alert;
 
     public DiscordEventListener(AlertEntity alert) {
-        discordWebhook = new DiscordWebhook(alert.getWebhookUrl());
         this.alert = alert;
     }
 
@@ -27,6 +24,7 @@ public class DiscordEventListener implements EventListener {
     public void stringEvent(String event) {
         logger.debug("New Event: {}", event);
         if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
+            DiscordWebhook discordWebhook = new DiscordWebhook(alert.getWebhookUrl());
             discordWebhook.setUsername(StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getUsername()));
             discordWebhook.setContent("Alert - " + StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getName()) + " was triggered!");
             DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
@@ -45,6 +43,7 @@ public class DiscordEventListener implements EventListener {
     @Override
     public void test() {
         logger.info("Testing alert {}", alert.getName());
+        DiscordWebhook discordWebhook = new DiscordWebhook(alert.getWebhookUrl());
         discordWebhook.setUsername(StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getUsername()));
         discordWebhook.setContent("Testing - " + StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getName()));
         DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
