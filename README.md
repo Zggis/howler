@@ -47,7 +47,7 @@ CONFIG | PATH | /data/config | Map this to a directory where Howler can save its
 Container Variable | Default Value | Description
 --- | --- | ---
 FILETYPES | txt,log | A comma separated string of file types that will be monitored by all data sources.
-LOGLEVEL | INFO | Set to DEBUG or TRACE to inclease the logging level for debugging.
+LOGLEVEL | INFO | Set to DEBUG or TRACE to increase the logging level for debugging.
 
 ### FAQ
 **Question:** So this is like Splunk?
