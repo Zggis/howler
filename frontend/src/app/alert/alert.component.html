@@ -34,7 +34,18 @@
         <tbody>
             <tr *ngFor="let alert of alerts">
                 <td>{{alert.name}}</td>
-                <td>{{alert.matchingString}}</td>
+                <td>
+                    <div class="row">
+                        <div class="col-auto">
+                            {{alert.matchingString}}
+                        </div>
+                        <div class="col-auto">
+                            <div *ngIf="alert.regularExp">
+                                <fa-icon [icon]="faCode" [styles]="{'color': 'goldenRod'}"></fa-icon> Regex
+                            </div>
+                        </div>
+                    </div>
+                </td>
                 <td>
                     <div *ngIf="alert.type == 'DISCORD'">
                         <fa-icon [icon]="faDiscord" [styles]="{'color': 'cornflowerblue'}"></fa-icon> Discord
@@ -70,10 +81,10 @@
                             <button *ngIf="alert.type == 'SLACK'" ngbDropdownItem (click)="testAlert(alert.id);"
                                 onclick="blur();">Test <fa-icon [icon]="faSlack">
                                 </fa-icon></button>
-                                <button ngbDropdownItem (click)="editAlert(alert);" onclick="blur();">Edit <fa-icon
+                            <button ngbDropdownItem (click)="editAlert(alert);" onclick="blur();">Edit <fa-icon
                                     [icon]="faPenToSquare">
                                 </fa-icon></button>
-                                <button ngbDropdownItem (click)="cloneAlert(alert);" onclick="blur();">Clone <fa-icon
+                            <button ngbDropdownItem (click)="cloneAlert(alert);" onclick="blur();">Clone <fa-icon
                                     [icon]="faClone">
                                 </fa-icon></button>
                             <button ngbDropdownItem (click)="enableAlert(alert.id);" onclick="blur();">Enable <fa-icon
@@ -133,9 +144,16 @@
                 <label for="matchingString" class="form-label">Trigger Event</label> <input #triggerevent type="text"
                     class="form-control" id="matchingString" name="matchingString"
                     [(ngModel)]="newAlert.matchingString">
-                <div class="form-text">Case insensitive string to look for in a log message.</div>
+                <div class="form-text">Case insensitive string to match in a log message.</div>
                 <div class="invalid-feedback">
                     Please enter a string to match.
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="regexSwitch" name="regexSwitch"
+                        [(ngModel)]="newAlert.regularExp">
+                    <label class="form-check-label" for="regexSwitch">Regex Matching</label>
                 </div>
             </div>
             <div *ngIf="newAlert.type === 'DISCORD'">
@@ -223,29 +241,36 @@
         <form>
             <div class="row mb-3">
                 <div class="col-4">
-                    <label for="name" class="form-label">Name</label> <input ngbAutofocus #editname type="text"
-                        class="form-control" name="name" [(ngModel)]="newAlert.name">
+                    <label for="nameUpdate" class="form-label">Name</label> <input ngbAutofocus #editname type="text"
+                        class="form-control" name="nameUpdate" id="nameUpdate" [(ngModel)]="newAlert.name">
                     <div class="invalid-feedback">
                         Please enter a name.
                     </div>
                 </div>
             </div>
             <div class="mb-3">
-                <label for="matchingString" class="form-label">Trigger Event</label> <input #edittriggerevent type="text"
-                    class="form-control" name="matchingString"
+                <label for="matchingStringUpdate" class="form-label">Trigger Event</label> <input #edittriggerevent
+                    type="text" class="form-control" name="matchingStringUpdate" id="matchingStringUpdate"
                     [(ngModel)]="newAlert.matchingString">
                 <div class="form-text">Case insensitive string to look for in a log message.</div>
                 <div class="invalid-feedback">
                     Please enter a string to match.
                 </div>
             </div>
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="regexSwitchUpdate"
+                        name="regexSwitch" [(ngModel)]="newAlert.regularExp">
+                    <label class="form-check-label" for="regexSwitchUpdate">Regex Matching</label>
+                </div>
+            </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-            (click)="modal.dismiss()">Cancel <fa-icon [icon]="faXmark"></fa-icon></button>
-        <button type="button" class="btn btn-success" (click)="updateAlert(editname,edittriggerevent)">Save Alert <fa-icon
-                [icon]="faFloppyDisk">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.dismiss()">Cancel
+            <fa-icon [icon]="faXmark"></fa-icon></button>
+        <button type="button" class="btn btn-success" (click)="updateAlert(editname,edittriggerevent)">Save Alert
+            <fa-icon [icon]="faFloppyDisk">
             </fa-icon>
         </button>
     </div>

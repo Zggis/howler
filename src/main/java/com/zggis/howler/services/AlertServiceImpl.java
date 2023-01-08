@@ -62,18 +62,19 @@ public class AlertServiceImpl implements AlertService {
     }
 
     private void checkForExisting(AlertEntity entity) {
-        Collection<AlertEntity> existingAlert = alertRepo.findByNameAndDataSourceIdAndMatchingString(entity.getName(), entity.getDataSourceId(), entity.getMatchingString());
+        Collection<AlertEntity> existingAlert = alertRepo.findByNameAndDataSourceIdAndMatchingStringAndRegularExp(entity.getName(), entity.getDataSourceId(), entity.getMatchingString(), entity.isRegularExp());
         if (!CollectionUtils.isEmpty(existingAlert)) {
-            throw new InvalidAlertException("Alert was not created/updated because an Alert with the same name, data source, and matching string exists.", 410);
+            throw new InvalidAlertException("Alert was not created/updated because an Alert with the same name, data source, and trigger event exists.", 410);
         }
     }
 
     @Override
-    public AlertEntity update(Long id, String name, String matchingString) throws InvalidAlertException {
+    public AlertEntity update(Long id, String name, String matchingString, boolean regex) throws InvalidAlertException {
         Optional<AlertEntity> findByID = alertRepo.findById(id);
         if(findByID.isPresent()){
             findByID.get().setName(name);
             findByID.get().setMatchingString(matchingString);
+            findByID.get().setRegularExp(regex);
             checkForExisting(findByID.get());
             AlertEntity savedAlert = alertRepo.save(findByID.get());
             deleteAlertListener(savedAlert);
