@@ -7,5 +7,5 @@ import java.util.Collection;
 
 public interface AlertRepo extends CrudRepository<AlertEntity, Long> {
     Collection<AlertEntity> deleteByDataSourceId(Long dataSourceId);
-    Collection<AlertEntity> findByNameAndDataSourceIdAndMatchingString(String name, Long dataSourceId, String matchingString);
+    Collection<AlertEntity> findByNameAndDataSourceIdAndMatchingStringAndRegularExp(String name, Long dataSourceId, String matchingString, boolean regularExp);
 }

@@ -23,6 +23,8 @@ public class AlertDTO implements Serializable {
 
     private String matchingString;
 
+    private boolean regularExp = false;
+
     private boolean enabled = true;
 
     private String type;
@@ -44,6 +46,7 @@ public class AlertDTO implements Serializable {
         this.name = entity.getName();
         this.dataSourceId = entity.getDataSourceId();
         this.matchingString = entity.getMatchingString();
+        this.regularExp = entity.isRegularExp();
         this.webhookUrl = entity.getWebhookUrl();
         this.enabled = entity.isEnabled();
         this.type = entity.getType();

@@ -50,7 +50,7 @@ public class AlertController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public ResponseEntity<AlertDTO> updateAlert(@RequestBody AlertDTO updatedAlert) {
         try {
-            AlertEntity result = alertService.update(updatedAlert.getId(), updatedAlert.getName(), updatedAlert.getMatchingString());
+            AlertEntity result = alertService.update(updatedAlert.getId(), updatedAlert.getName(), updatedAlert.getMatchingString(), updatedAlert.isRegularExp());
             return ResponseEntity.ok(new AlertDTO(result));
         } catch (InvalidAlertException e) {
             logger.error(e.getMessage());

@@ -2,6 +2,7 @@ package com.zggis.howler.listeners;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zggis.howler.entity.AlertEntity;
+import com.zggis.howler.utils.LogMatcher;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ public class GotifyEventListener implements EventListener {
     @Override
     public void stringEvent(String event) {
         logger.debug("New Event: {}", event);
-        if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
+        if (LogMatcher.check(alert.getMatchingString(), event, alert.isRegularExp())) {
             try {
                 sendMessage(new Message("Alert - " + alert.getName(), event, 1));
             } catch (IOException | InterruptedException e) {

@@ -3,6 +3,7 @@ package com.zggis.howler.listeners;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.webhook.Payload;
 import com.zggis.howler.entity.AlertEntity;
+import com.zggis.howler.utils.LogMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public class SlackEventListener implements EventListener {
     @Override
     public void stringEvent(String event) {
         logger.debug("New Event: {}", event);
-        if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
+        if (LogMatcher.check(alert.getMatchingString(), event, alert.isRegularExp())) {
             Payload payload = Payload.builder().text(event).build();
             try {
                 Slack.getInstance().send(alert.getWebhookUrl(), payload);
