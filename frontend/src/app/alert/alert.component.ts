@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { faFloppyDisk, faPenToSquare, faClone, faPlus, faBell, faTriangleExclamation, faFaceFrown, faCircleExclamation, faXmark, faKiwiBird, faLink, faPalette, faKey, faFolder, faTrashCan, faBellSlash, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faFloppyDisk, faPenToSquare, faClone, faPlus, faBell, faTriangleExclamation, faFaceFrown, faCircleExclamation, faXmark, faKiwiBird, faLink, faPalette, faKey, faFolder, faTrashCan, faBellSlash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faSlack } from '@fortawesome/free-brands-svg-icons';
 import { Alert, AlertService } from 'src/app/service/alert.service';
 import { DataSource, DatasourceService } from 'src/app/service/datasource.service';
@@ -20,7 +20,7 @@ export class AlertComponent implements OnInit {
 
   alerts: Alert[] = [];
   dataSources: DataSource[] = [];
-  newAlert: Alert = new Alert('', -1, -1, '', '', true, 'DISCORD', '', 'GREEN', 'Howler', '', '');
+  newAlert: Alert = new Alert('', -1, -1, '', '', false, true, 'DISCORD', '', 'GREEN', 'Howler', '', '');
   error: String = "";
 
   faPlus = faPlus;
@@ -42,6 +42,7 @@ export class AlertComponent implements OnInit {
   faClone = faClone;
   faPenToSquare = faPenToSquare;
   faFloppyDisk = faFloppyDisk;
+  faCode = faCode;
 
   constructor(private alertService: AlertService, private dataSourceService: DatasourceService, private modalService: NgbModal) { }
 
@@ -55,7 +56,7 @@ export class AlertComponent implements OnInit {
       alerts.forEach(alert =>
         this.dataSources.forEach(ds => {
           if (ds.id == alert.dataSourceId) {
-            this.alerts.push(new Alert(alert.name, alert.id, alert.dataSourceId, ds.path, alert.matchingString, alert.enabled, alert.type, alert.webhookUrl, alert.color, alert.username, alert.serverUrl, alert.token));
+            this.alerts.push(new Alert(alert.name, alert.id, alert.dataSourceId, ds.path, alert.matchingString, alert.regularExp, alert.enabled, alert.type, alert.webhookUrl, alert.color, alert.username, alert.serverUrl, alert.token));
           }
         }
         )
@@ -140,7 +141,7 @@ export class AlertComponent implements OnInit {
   }
 
   reset() {
-    this.newAlert = new Alert('', -1, -1, '', '', true, 'DISCORD', '', 'GREEN', 'Howler', '', '');
+    this.newAlert = new Alert('', -1, -1, '', '', false, true, 'DISCORD', '', 'GREEN', 'Howler', '', '');
     if (this.dataSources.length > 0) {
       this.newAlert.dataSourceId = this.dataSources[0].id;
     }

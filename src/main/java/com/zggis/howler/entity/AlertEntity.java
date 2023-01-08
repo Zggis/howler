@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.awt.*;
 
 @Entity
@@ -27,6 +24,10 @@ public class AlertEntity {
 
     private String matchingString;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean regularExp = false;
+
+    @Column(columnDefinition = "boolean default true")
     private boolean enabled = true;
 
     private String type;
@@ -47,6 +48,7 @@ public class AlertEntity {
         this.name = alertDTO.getName();
         this.dataSourceId = alertDTO.getDataSourceId();
         this.matchingString = alertDTO.getMatchingString();
+        this.regularExp = alertDTO.isRegularExp();
         this.webhookUrl = alertDTO.getWebhookUrl();
         this.enabled = alertDTO.isEnabled();
         this.type = alertDTO.getType();

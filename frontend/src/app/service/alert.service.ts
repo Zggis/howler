@@ -11,6 +11,7 @@ export class Alert {
     public dataSourceId: number,
     public dataSourcePath: string,
     public matchingString: string,
+    public regularExp: boolean,
     public enabled: boolean,
     public type: string,
     public webhookUrl: string,

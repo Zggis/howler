@@ -3,6 +3,7 @@ package com.zggis.howler.listeners;
 import com.mgnt.utils.StringUnicodeEncoderDecoder;
 import com.zggis.howler.entity.AlertEntity;
 import com.zggis.howler.utils.DiscordWebhook;
+import com.zggis.howler.utils.LogMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public class DiscordEventListener implements EventListener {
     @Override
     public void stringEvent(String event) {
         logger.debug("New Event: {}", event);
-        if (event.toLowerCase().contains(alert.getMatchingString().toLowerCase())) {
+        if (LogMatcher.check(alert.getMatchingString(), event, alert.isRegularExp())) {
             DiscordWebhook discordWebhook = new DiscordWebhook(alert.getWebhookUrl());
             discordWebhook.setUsername(StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getUsername()));
             discordWebhook.setContent("Alert - " + StringUnicodeEncoderDecoder.encodeStringToUnicodeSequence(alert.getName()) + " was triggered!");
