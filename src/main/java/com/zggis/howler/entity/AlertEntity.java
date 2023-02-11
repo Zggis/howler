@@ -1,11 +1,11 @@
 package com.zggis.howler.entity;
 
 import com.zggis.howler.dto.AlertDTO;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.awt.*;
 
 @Entity

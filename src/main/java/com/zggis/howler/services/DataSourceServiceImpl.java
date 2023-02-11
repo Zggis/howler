@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
