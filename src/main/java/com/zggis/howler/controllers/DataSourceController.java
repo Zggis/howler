@@ -4,7 +4,6 @@ import com.zggis.howler.dto.DataSourceDTO;
 import com.zggis.howler.entity.DataSourceEntity;
 import com.zggis.howler.exceptions.InvalidDataSourceException;
 import com.zggis.howler.services.DataSourceService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ public class DataSourceController {
     @Value("${file.types}")
     private String fileExtensions;
 
-    @Operation(summary = "Fetch all data sources")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<List<DataSourceDTO>> fetchAllDataSources() {
         List<DataSourceDTO> result = new ArrayList<>();
@@ -40,7 +38,6 @@ public class DataSourceController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(summary = "Add new data source")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<DataSourceDTO> addDataSource(@RequestBody DataSourceDTO newDataSource) {
         Path file = new File(newDataSource.getPath()).toPath();
@@ -60,14 +57,12 @@ public class DataSourceController {
         return ResponseEntity.status(411).build();
     }
 
-    @Operation(summary = "Remove data source")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<DataSourceDTO> removeDataSource(@PathVariable Long id) {
         dataSourceService.deleteById(id);
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "Fetch file types")
     @RequestMapping(value = "/extensions", method = RequestMethod.GET)
     public ResponseEntity<List<String>> fetchAllFileTypes() {
         List<String> result = new ArrayList<>();

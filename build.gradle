@@ -1,8 +1,8 @@
 import groovy.json.JsonSlurper
 
 plugins {
-    id 'org.springframework.boot' version '2.7.5'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
 }
 
@@ -10,7 +10,7 @@ def packageSlurper = new JsonSlurper()
 def packageJson = packageSlurper.parse file('frontend/package.json')
 version = packageJson.version
 group = 'com.zggis'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -21,7 +21,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'commons-io:commons-io:2.11.0'
