@@ -23,7 +23,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
-    "@ng-bootstrap/ng-bootstrap": "^13.1.0",
+    "@ng-bootstrap/ng-bootstrap": "^15.0.0",
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.2",
     "rxjs": "~7.5.0",
