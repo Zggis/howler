@@ -9,14 +9,12 @@ import { AlertComponent } from './alert/alert.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DatasourceComponent } from './datasource/datasource.component';
 import { FormsModule } from '@angular/forms';
-import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
-    DatasourceComponent,
-    SettingsComponent
+    DatasourceComponent
   ],
   imports: [
     BrowserModule,
