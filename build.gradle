@@ -1,7 +1,7 @@
 import groovy.json.JsonSlurper
 
 plugins {
-    id 'org.springframework.boot' version '3.0.2'
+    id 'org.springframework.boot' version '3.1.0'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
 }
@@ -17,14 +17,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'commons-io:commons-io:2.11.0'
-    implementation 'com.github.michaelgantman:MgntUtils:1.6.0.5'
+    implementation 'com.google.guava:guava:32.0.0-jre'
+    implementation 'commons-io:commons-io:2.12.0'
+    implementation 'com.github.michaelgantman:MgntUtils:1.6.0.6'
     implementation 'com.github.seratch:jslack:3.4.2'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
