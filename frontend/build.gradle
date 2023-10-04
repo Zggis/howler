@@ -1,13 +1,12 @@
 plugins {
-  id "com.github.node-gradle.node" version "3.5.1"
+  id "com.github.node-gradle.node" version "7.0.0"
 }
 
 node {
-  version = '16.16.0'
-  npmVersion = '8.11.0'
+  version = '18.17.1'
+  npmVersion = '9.8.1'
   download = true
   workDir = file("${project.buildDir}/node")
-  nodeModulesDir = file("${project.projectDir}")
 }
 
 task build(type: NpmTask) {
